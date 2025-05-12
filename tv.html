@@ -1,23 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Live Stream</title>
-</head>
-<body style="margin:0; background:#000;">
-  <video id="video" width="100%" height="auto" controls autoplay></video>
-
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script>
-    var video = document.getElementById('video');
-    var videoSrc = "http://alvetv.com/moviebanglatv/8080/index.m3u8";
-
-    if (Hls.isSupported()) {
-      var hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = videoSrc;
-    }
-  </script>
-</body>
-</html>
+<iframe 
+  src="https://plyr.link/?video=http://alvetv.com/moviebanglatv/8080/index.m3u8" 
+  width="100%" 
+  height="600" 
+  frameborder="0" 
+  allowfullscreen>
+</iframe>
