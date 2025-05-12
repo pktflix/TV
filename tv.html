@@ -1,7 +1,84 @@
-<iframe 
-  src="https://plyr.link/?video=http://alvetv.com/moviebanglatv/8080/index.m3u8" 
-  width="100%" 
-  height="600" 
-  frameborder="0" 
-  allowfullscreen>
-</iframe>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>লাইভ টিভি স্ট্রিমিং</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jwplayer.com/libraries/O4mPlqeTEeK_viIACpYGxA.js"></script>
+  <style>
+    #player-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
+    #popupMessage {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #222;
+      color: #fff;
+      padding: 15px 25px;
+      border-radius: 8px;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 9999;
+      opacity: 0;
+      animation: fadeSlideIn 0.5s forwards;
+    }
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        top: 40px;
+      }
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Popup Message -->
+<div id="popupMessage">
+  ভিডিও প্লে হতে ২০-৩০ সেকেন্ড লেট হতে পারে, একটু অপেক্ষা করুন।
+</div>
+
+<!-- Player -->
+<div id="player-container">
+  <div id="myPlayer">Loading the player...</div>
+</div>
+
+<!-- View Counter -->
+<div style="text-align:center; font-size:18px; margin-top:10px; color:#444; animation: fadeSlideIn 1s;">
+  এই টিভি প্লেয়ারটি <strong id="viewCount">...</strong> বার দেখা হয়েছে।
+</div>
+
+<script>
+  // Initialize JW Player
+  jwplayer("myPlayer").setup({
+    file: "http://alvetv.com/moviebanglatv/8080/index.m3u8",
+    image: "https://i.ibb.co/x7k0XpR/moviebangla-poster.jpg",  // optional poster
+    width: "100%",
+    aspectratio: "16:9",
+    autostart: true
+  });
+
+  // Popup auto-hide
+  setTimeout(function() {
+    let popup = document.getElementById('popupMessage');
+    popup.style.animation = 'fadeOut 1s forwards';
+    setTimeout(() => popup.remove(), 1000);
+  }, 6000); // Visible for 6 seconds
+
+  // Simple View Counter with localStorage
+  let count = localStorage.getItem('mb-jw-view') || 0;
+  count++;
+  localStorage.setItem('mb-jw-view', count);
+  document.getElementById('viewCount').innerText = count;
+</script>
+
+</body>
+</html>
