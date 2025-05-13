@@ -1,20 +1,120 @@
+<!DOCTYPE html><html lang="bn">
 <head>
-  <title>Page Title</title>
   <meta charset="UTF-8">
-  <!-- Player -->
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+  <title>Free IPTV (Clean Version)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+    }
+    header {
+      background: linear-gradient(to right, #1e293b, #0f172a);
+      color: aqua;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .clock {
+      font-size: 16px;
+      font-weight: bold;
+      background: #1e293b;
+      padding: 6px 12px;
+      border-radius: 5px;
+    }
+    .container {
+      padding: 10px;
+    }
+    #videoPlayer {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: black;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .video-js {
+      width: 100%;
+      height: 100%;
+    }
+    .channel-list {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+    }
+    .channel {
+      background: #222;
+      padding: 10px;
+      border-radius: 10px;
+      min-width: 100px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .channel.active {
+      background: #ff5722;
+      color: white;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      padding: 10px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
-
 <body>
-  <div id="player"></div>
-  <script>
-    var player = new Clappr.Player({
-      source: "https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_720p/chunks.m3u8",
-      parentId: "#player",
-      width: '100%',
-      height: '100%'
-    });
-  </script>
-</body>
+  <header>
+    <h1>Free IPTV</h1>
+    <div class="clock" id="clock"></div>
+  </header>  <div class="container">
+    <div id="videoPlayer">
+      <video id="player" class="video-js vjs-default-skin" controls preload="auto" autoplay muted>
+        <source src="" type="application/x-mpegURL">
+      </video>
+    </div>
+    <div class="channel-list" id="channelList"></div>
+  </div>  <div class="footer">©️ 2025 Free IPTV. All rights reserved.</div>  <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>  <script>
+    const channels = [
+      { name: "Tsports", url: "https://live.tsports.com/mobile_hls/tsports_live_2/playlist.m3u8" },
+      { name: "Star Jalsha", url: "https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8" },
+      { name: "Zee Bangla", url: "https://catchup.yuppcdn.net/amazonv2/36/preview/zeebangla/master/chunklist.m3u8" }
+    ];
 
- 
+    const player = videojs("player");
+    const channelList = document.getElementById("channelList");
+
+    function loadChannel(index) {
+      player.src({ type: "application/x-mpegURL", src: channels[index].url });
+      player.play();
+      document.querySelectorAll('.channel').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    channels.forEach((channel, index) => {
+      const div = document.createElement("div");
+      div.className = "channel";
+      div.textContent = channel.name;
+      div.onclick = () => loadChannel(index);
+      channelList.appendChild(div);
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const hour12 = hours % 12 || 12;
+      const time = hour12 + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+      document.getElementById('clock').textContent = time;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+    loadChannel(0);
+  </script></body>
+</html>
