@@ -1,3 +1,331 @@
-#EXTM3U
-#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2048000,RESOLUTION=1280x720
-http://45.68.35.218:4001/play/a01s/index.m3u8
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M3U Playlist Link Checker</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #4e54c8, #8f94fb);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            margin: 10px 0;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            width: 100%;
+        }
+
+        input {
+            background-color: #f0f0f0;
+            color: #333;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            background: #6a11cb;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #results-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            background-color: #ffffff;
+            color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #6a11cb;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .live {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .dead {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: #ffc107;
+            font-style: italic;
+        }
+
+        #loader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loader img {
+            width: 50px;
+            height: 50px;
+        }
+
+        #status-summary {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+            line-height: 1.6;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        #status-summary span {
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        #status-summary button {
+            margin: 5px;
+            background-color: #28a745;
+            background: linear-gradient(to right, #28a745, #85e85c);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #status-summary button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            th, td {
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>M3U Playlist Link Checker</h1>
+    <input type="text" id="playlistUrl" placeholder="Enter your M3U playlist URL here..." />
+    <button id="fetchPlaylist">Check Playlist</button>
+    <div id="loader">
+        <p>Checking links...</p>
+        <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+    </div>
+    <div id="status-summary">
+        <p>Total Channels: <span id="totalChannels">0</span> | Live: <span id="liveCount">0</span> | Dead: <span id="deadCount">0</span> | Checking: <span id="checkingCount">0</span></p>
+        <button id="downloadLive">Download Live Channels (.txt)</button>
+        <button id="downloadDead">Download Dead Channels (.txt)</button>
+    </div>
+    <div id="results-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Channel Name</th>
+                    <th>Status</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody id="results"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let originalChannels = [];
+
+        document.getElementById('fetchPlaylist').addEventListener('click', async function () {
+            const playlistUrl = document.getElementById('playlistUrl').value;
+            const resultsTable = document.getElementById('results');
+            const loader = document.getElementById('loader');
+            const totalChannels = document.getElementById('totalChannels');
+            const liveCount = document.getElementById('liveCount');
+            const deadCount = document.getElementById('deadCount');
+            const checkingCount = document.getElementById('checkingCount');
+
+            resultsTable.innerHTML = '';
+            totalChannels.textContent = '0';
+            liveCount.textContent = '0';
+            deadCount.textContent = '0';
+            checkingCount.textContent = '0';
+
+            if (!playlistUrl) {
+                alert('Please enter a valid M3U playlist URL!');
+                return;
+            }
+
+            loader.style.display = 'block';
+
+            try {
+                const response = await fetch(playlistUrl);
+                if (!response.ok) throw new Error('Failed to fetch playlist.');
+
+                const playlistText = await response.text();
+                const lines = playlistText.split('\n');
+                originalChannels = [];
+
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].startsWith('#EXTINF')) {
+                        const channelName = lines[i].split(',')[1]?.trim();
+                        const link = lines[i + 1]?.trim();
+                        if (channelName && link && link.startsWith('http')) {
+                            originalChannels.push({ extinf: lines[i], name: channelName, link });
+                        }
+                    }
+                }
+
+                totalChannels.textContent = originalChannels.length;
+                const rows = originalChannels.map(({ name, link }) => {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    const statusCell = document.createElement('td');
+                    const linkCell = document.createElement('td');
+
+                    nameCell.textContent = name;
+                    statusCell.textContent = 'Checking...';
+                    statusCell.classList.add('loading');
+                    linkCell.textContent = link;
+
+                    row.appendChild(nameCell);
+                    row.appendChild(statusCell);
+                    row.appendChild(linkCell);
+                    resultsTable.appendChild(row);
+
+                    return { name, link, statusCell };
+                });
+
+                let live = 0;
+                let dead = 0;
+                let checking = originalChannels.length;
+
+                await Promise.all(
+                    rows.map(async ({ link, statusCell }) => {
+                        try {
+                            const headResponse = await fetch(link, { method: 'HEAD' });
+                            if (headResponse.ok) {
+                                statusCell.textContent = 'Live';
+                                statusCell.classList.add('live');
+                                live++;
+                            } else {
+                                statusCell.textContent = 'Dead';
+                                statusCell.classList.add('dead');
+                                dead++;
+                            }
+                        } catch {
+                            statusCell.textContent = 'Dead';
+                            statusCell.classList.add('dead');
+                            dead++;
+                        }
+
+                        checking--;
+                        liveCount.textContent = live;
+                        deadCount.textContent = dead;
+                        checkingCount.textContent = checking;
+                    })
+                );
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                loader.style.display = 'none';
+            }
+        });
+
+        document.getElementById('downloadLive').addEventListener('click', function () {
+            const liveChannels = originalChannels.filter((_, i) =>
+                document.querySelectorAll('.live')[i]
+            );
+
+            if (liveChannels.length) {
+                let fileContent = '';
+                liveChannels.forEach(({ extinf, link }) => {
+                    fileContent += `${extinf}\n${link}\n`;
+                });
+
+                const blob = new Blob([fileContent], { type: 'text/plain' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'live_channels.txt';
+                a.click();
+            } else {
+                alert('No live channels available to download!');
+            }
+        });
+
+        document.getElementById('downloadDead').addEventListener('click', function () {
+            const deadChannels = originalChannels.filter((_, i) =>
+                document.querySelectorAll('.dead')[i]
+            );
+
+            if (deadChannels.length) {
+                let fileContent = '';
+                deadChannels.forEach(({ extinf, link }) => {
+                    fileContent += `${extinf}\n${link}\n`;
+                });
+
+                const blob = new Blob([fileContent], { type: 'text/plain' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'dead_channels.txt';
+                a.click();
+            } else {
+                alert('No dead channels available to download!');
+            }
+        });
+    </script>
+</body>
+</html>
