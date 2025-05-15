@@ -1,414 +1,1493 @@
-<!DOCTYPE html><html lang="bn"><head><style class="vjs-styles-defaults">
-      .video-js {
-        width: 300px;
-        height: 150px;
-      }
+<!DOCTYPE html>
+<html>
 
-      .vjs-fluid:not(.vjs-audio-only-mode) {
-        padding-top: 56.25%
-      }
-    </style><style class="vjs-styles-dimensions">
-      .player-dimensions {
-        width: 427px;
-        height: 239.99999999999997px;
-      }
+<head>
 
-      .player-dimensions.vjs-fluid:not(.vjs-audio-only-mode) {
-        padding-top: 56.20608899297424%;
-      }
+    <meta charset="utf-8">
+
+    <title>Internet_TV</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    <script type="text/javascript" src="clappr.min.js"></script>
+    <link href="https://miraz-live-tv.vercel.app/custom.css" rel="stylesheet">
+    <script type="text/javascript" src="clappr-chromecast-plugin.min.js"></script>
+    <style class="clappr-style">
+        @font-face {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 400;
+            src: local("Roboto"), local("Roboto-Regular"), url(https://cdn.jsdelivr.net/npm/clappr@latest/dist/38861cba61c66739c1452c3a71e39852.ttf) format("truetype")
+        }
+
+        body {
+            background: #000 url(https://miraz-live-tv.vercel.app/img/bgu.jpg) top center;
+        }
     </style>
-  <meta charset="UTF-8">
-  <title>Live TV</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-    }
+</head>
 
-    header {
-      background: linear-gradient(to right, #1e293b, #0f172a);
-      color: aqua;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+<body>
 
-    header h1 {
-      font-size: 18px;
-      margin: 0;
-      animation: slideInLeft 0.8s ease;
-    }
+    <div class="container-fluid">
+        <div class="row justify-content-center" style="margin-top: 50px;">
 
-    .clock {
-      font-size: 16px;
-      font-weight: bold;
-      background: #1e293b;
-      padding: 6px 12px;
-      border-radius: 5px;
-      animation: slideInRight 0.8s ease;
-    }
+            <div class="col-12 col-lg-8">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <div id="player" class="embed-responsive-item">
+                        <video id="vid1" class="video-js vjs-default-skin vjs-fluid" poster="http://i.imgur.com/xxqm7EE.png" width="640" height="360" controls autoplay preload="none" data-setup='{ "techOrder": ["html5", "flash", "youtube"], "sources": [{ "type": "application/x-mpegURL", "src": "https://nmxlive.akamaized.net/hls/live/529965/Live_1/index.m3u8"}]}'></video>
+                    </div>
+                </div>
+            </div>
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-    }
+            <div class="col-12 col-lg-4">
+                <div class="channel-list">
+                    <ul class="nav nav-tabs nav-justified" style=" margin-bottom: 15px;">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-type="Bangla">Bangla</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-type="English">English</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-type="Hindi">Hindi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-type="Sports">Sports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-type="Cartoon">Cartoon</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-type="Others">Others</a>
+                        </li>
+                    </ul>
+                    <ul id="vidlink" class="thumbnail-slider d-flex flex-wrap">
 
-    #videoPlayer {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: black;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      position: relative;
-      animation: fadeIn 1s ease;
-    }
 
-    .video-js {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-    }
 
-    .watermark {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      padding: 5px 10px;
-      font-size: 12px;
-      color: white;
-      border-radius: 5px;
-    }
 
-    .category-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 15px;
-      animation: fadeInDown 0.7s ease;
-    }
+                        <li class="Hindi"><a id="myLink" title="Click" href="http://103.141.159.69:8000/play/a03z/index.m3u8"><img src="https://miraz-live-tv.vercel.app/bindass.jpeg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="http://iptvh.it/mirajlivbpll1.m3u8"><img src="https://miraz-live-tv.vercel.app/utvaction.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="https://miraz-live-tv.vercel.app/hls/zoom.m3u8"><img src="https://miraz-live-tv.vercel.app/zoom.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="https://miraz-live-tv.vercel.app/hls/andpictures.m3u8"><img src="https://miraz-live-tv.vercel.app/andpictures-hd.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="https://miraz-live-tv.vercel.app/hls/colore-tv-hd.m3u8"><img src="https://miraz-live-tv.vercel.app/colors-tv-hd.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="https://dai.google.com/ssai/event/rH_ZU7LMTy6I5kwhB17Wjg/master.m3u8"><img src="https://miraz-live-tv.vercel.app/zeecinemahd.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="https://miraz-live-tv.vercel.app/hls/starplus.m3u8"><img src="https://miraz-live-tv.vercel.app/starplus.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="https://miraz-live-tv.vercel.app/hls/colorscineplex.m3u8"><img src="https://miraz-live-tv.vercel.app/colorscineplex.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/sonymax.m3u8"><img src="https://miraz-live-tv.vercel.app/sonymax.png" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/stargold2hd.m3u8"><img src="https://miraz-live-tv.vercel.app/stargold2hd.png" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/sonyen.m3u8"><img src="https://miraz-live-tv.vercel.app/sonyen.png" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/sony-maxhd.m3u8"><img src="https://miraz-live-tv.vercel.app/sony-maxhd.jpg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/zeetv.m3u8"><img src="https://miraz-live-tv.vercel.app/zeetv.png" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/dis-science.m3u8"><img src="https://miraz-live-tv.vercel.app/dis-science.png" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/stargold.m3u8"><img src="https://miraz-live-tv.vercel.app/stargold.jpg" alt=""></a></li>
 
-    .category-select {
-      display: flex;
-      align-items: center;
-    }
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/dhin.m3u8"><img src="https://miraz-live-tv.vercel.app/dhin.jpg" alt=""></a></li>
 
-    .category-select select {
-      font-size: 14px;
-      padding: 8px;
-      background: #1e293b;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      min-width: 150px;
-      transition: background 0.3s;
-    }
 
-    .category-select select:hover {
-      background: #334155;
-    }
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/9xm.m3u8"><img src="https://miraz-live-tv.vercel.app/9xm.png" alt=""></a></li>
 
-    .channel-list {
-      display: flex;
-      overflow-x: auto;
-      gap: 10px;
-      margin-bottom: 20px;
-      position: relative;
-      animation: fadeInUp 0.8s ease;
-    }
+                        <li class="English"><a id="myLink" title="Click" href="hls/sonypixhd.m3u8"><img src="https://miraz-live-tv.vercel.app/sonypixhd.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/movies-now.m3u8"><img src="https://miraz-live-tv.vercel.app/movies-now.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/starmovies.m3u8"><img src="https://miraz-live-tv.vercel.app/starmovies.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/bbcearth.m3u8"><img src="https://miraz-live-tv.vercel.app/bbcearth.jpg" alt=""></a></li>
 
-    .channel {
-      background: #222;
-      padding: 10px;
-      border-radius: 10px;
-      min-width: 100px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      transform: scale(1);
-    }
 
-    .channel:hover {
-      background: #ff5722;
-      transform: scale(1.05);
-    }
+                        <li class="English"><a id="myLink" title="Click" href="hls/mn+.m3u8"><img src="https://miraz-live-tv.vercel.app/mn+.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/animalplanent.m3u8"><img src="https://miraz-live-tv.vercel.app/animalplanent.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/discovery.m3u8"><img src="https://miraz-live-tv.vercel.app/dis.png" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/ngohd.m3u8"><img src="https://miraz-live-tv.vercel.app/Nat_Geo_HD.png" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/tlc.m3u8"><img src="https://miraz-live-tv.vercel.app/tlc.jpeg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/wild.m3u8"><img src="wild.png" alt=""></a></li>
 
-    .channel.active {
-      background: #ff5722;
-      color: white;
-    }
+                        <li class="English"><a id="myLink" title="Click" href="hls/star-worldhd.m3u8"><img src="starhd.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/mnx-hd.m3u8"><img src="mnx-hd.jpg" alt=""></a></li>
 
-    .channel img {
-      border-radius: 6px;
-      transition: transform 0.3s ease;
-    }
+                        <li class="English"><a id="myLink" title="Click" href="hls/axn.m3u8"><img src="axn.png" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/bbcworld.m3u8"><img src="bbcworld.jpg" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/aljazeera.m3u8"><img src="aljazeera.jpg" alt=""></a></li>
 
-    .channel:hover img {
-      transform: scale(1.1);
-    }
 
-    .fav {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      color: gold;
-    }
 
-    .footer {
-      text-align: center;
-      font-size: 12px;
-      color: #aaa;
-      padding: 10px;
-      margin-top: 20px;
-      animation: fadeIn 1s ease;
-    }
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/sonysix.m3u8"><img src="https://miraz-live-tv.vercel.app/Sony-six-hd.png" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01448-samsungin-eurosportin-samsungin/playlist.m3u8"><img src="https://miraz-live-tv.vercel.app/euro.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/Star_Sport_Select1HD.m3u8"><img src="https://miraz-live-tv.vercel.app/Star_Sports_Select_1_HD.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/stersports1hd.m3u8"><img src="https://miraz-live-tv.vercel.app/stersports1hd.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/starsports2.m3u8"><img src="https://miraz-live-tv.vercel.app/ster-sport-2hd.png" alt=""></a></li>
 
-    .channel-arrow {
-      font-size: 30px;
-      color: white;
-      cursor: pointer;
-      z-index: 10;
-    }
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/sonyten3.m3u8"><img src="https://miraz-live-tv.vercel.app/sonyten3.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/select2.m3u8"><img src="https://miraz-live-tv.vercel.app/select2.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/sonyten2.m3u8"><img src="https://miraz-live-tv.vercel.app/sony_ten_2.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/sonyten1.m3u8"><img src="https://miraz-live-tv.vercel.app/sony_ten_1.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="https://live.tsports.com/live/tsports_live_720/index.m3u8"><img src="https://miraz-live-tv.vercel.app/tsports.jpg" alt=""></a></li>
 
-    .prev-channel { margin-right: 20px; }
-    .next-channel { margin-left: 20px; }
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/ten.m3u8"><img src="https://miraz-live-tv.vercel.app/ten_sports.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/ptv.m3u8"><img src="ptv.jpg" alt=""></a></li>
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/sunbangla.m3u8"><img src="https://miraz-live-tv.vercel.app/sunbangla.jpg" alt=""></a></li>
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/indepen.m3u8"><img src="https://miraz-live-tv.vercel.app/indepen.png" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/Sony_Aath.m3u8"><img src="https://miraz-live-tv.vercel.app/Sony_Aath.png" alt=""></a></li>
 
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
 
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/Gazi-TV.m3u8"><img src="https://miraz-live-tv.vercel.app/gtv.jpg" alt=""></a></li>
 
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-  </style>
-<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style></head>
-<body oncontextmenu="return false;">
 
-  <header>
-    <h1>ꜰʀᴇᴇ ɪᴘᴛᴠ</h1>
-    <div class="clock" id="clock">1:21 AM</div>
-  </header>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/travelxp.m3u8"><img src="https://miraz-live-tv.vercel.app/ravelxphd.jpg" alt=""></a></li>
 
-  <div class="container">
-    <div id="videoPlayer">
-      <div data-setup="{&quot;controls&quot;: true, &quot;fullscreen&quot;: true}" preload="auto" playsinline="true" muted="true" autoplay="true" class="video-js vjs-default-skin vjs-controls-enabled vjs-touch-enabled vjs-workinghover vjs-v7 vjs-playing vjs-has-started vjs-live player-dimensions vjs-user-inactive" id="player" tabindex="-1" lang="bn" translate="no" role="region" aria-label="Video Player"><video id="player_html5_api" class="vjs-tech" autoplay="" muted="muted" playsinline="playsinline" preload="auto" data-setup="{&quot;controls&quot;: true, &quot;fullscreen&quot;: true}" tabindex="-1" src="blob:https://freeiptv.rf.gd/eff48121-368d-4263-a5c3-7e80b3e5e372"></video><div class="vjs-poster vjs-hidden" tabindex="-1" aria-disabled="false"></div><div class="vjs-text-track-display" translate="yes" aria-live="off" aria-atomic="true"><div style="position: absolute; inset: 0px; margin: 1.5%;"></div></div><div class="vjs-loading-spinner" dir="ltr"><span class="vjs-control-text">Video Player is loading.</span></div><button class="vjs-big-play-button" type="button" title="Play Video" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Play Video</span></button><div class="vjs-control-bar" dir="ltr"><button class="vjs-play-control vjs-control vjs-button vjs-playing" type="button" title="Pause" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Pause</span></button><div class="vjs-volume-panel vjs-control vjs-volume-panel-horizontal"><button class="vjs-mute-control vjs-control vjs-button vjs-vol-0" type="button" title="Unmute" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Unmute</span></button><div class="vjs-volume-control vjs-control vjs-volume-horizontal"><div tabindex="0" class="vjs-volume-bar vjs-slider-bar vjs-slider vjs-slider-horizontal" role="slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Volume Level" aria-live="polite" aria-valuetext="0%"><div class="vjs-volume-level"><span class="vjs-control-text"></span></div></div></div></div><div class="vjs-current-time vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Current Time&nbsp;</span><span class="vjs-current-time-display" aria-live="off" role="presentation">0:52</span></div><div class="vjs-time-control vjs-time-divider" aria-hidden="true"><div><span>/</span></div></div><div class="vjs-duration vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Duration&nbsp;</span><span class="vjs-duration-display" aria-live="off" role="presentation">-:-:-</span></div><div class="vjs-progress-control vjs-control"><div tabindex="0" class="vjs-progress-holder vjs-slider vjs-slider-horizontal" role="slider" aria-valuenow="100.00" aria-valuemin="0" aria-valuemax="100" aria-label="Progress Bar" aria-valuetext="0:52 of 0:53"><div class="vjs-load-progress" style="width: 100%;"><span class="vjs-control-text"><span>Loaded</span>: <span class="vjs-control-text-loaded-percentage">100.00%</span></span><div data-start="36" data-end="65.868978" style="left: 54.65%; width: 45.35%;"></div></div><div class="vjs-play-progress vjs-slider-bar" aria-hidden="true" style="width: 100%;"></div></div></div><div class="vjs-live-control vjs-control"><div class="vjs-live-display" aria-live="off"><span class="vjs-control-text">Stream Type&nbsp;</span>LIVE</div></div><button class="vjs-seek-to-live-control vjs-control vjs-at-live-edge" type="button" title="Seek to live, currently playing live" aria-disabled="true"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Seek to live, currently playing live</span><span class="vjs-seek-to-live-text" aria-hidden="true">LIVE</span></button><div class="vjs-remaining-time vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Remaining Time&nbsp;</span><span aria-hidden="true">-</span><span class="vjs-remaining-time-display" aria-live="off" role="presentation">-:-:-</span></div><div class="vjs-custom-control-spacer vjs-spacer ">&nbsp;</div><div class="vjs-playback-rate vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><div class="vjs-playback-rate-value" id="vjs-playback-rate-value-label-player_component_291">1x</div><button class="vjs-playback-rate vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Playback Rate" aria-haspopup="true" aria-expanded="false" aria-describedby="vjs-playback-rate-value-label-player_component_291"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Playback Rate</span></button><div class="vjs-menu"><ul class="vjs-menu-content"></ul></div></div><div class="vjs-chapters-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-chapters-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Chapters" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Chapters</span></button><div class="vjs-menu"><ul class="vjs-menu-content"><li class="vjs-menu-title" tabindex="-1">Chapters</li></ul></div></div><div class="vjs-descriptions-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-descriptions-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Descriptions" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Descriptions</span></button><div class="vjs-menu"><ul class="vjs-menu-content"><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">descriptions off</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><div class="vjs-subs-caps-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-subs-caps-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Subtitles" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Subtitles</span></button><div class="vjs-menu"><ul class="vjs-menu-content"><li class="vjs-menu-item vjs-texttrack-settings" tabindex="-1" role="menuitem" aria-disabled="false"><span class="vjs-menu-item-text">subtitles settings</span><span class="vjs-control-text" aria-live="polite">, opens subtitles settings dialog</span></li><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">subtitles off</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><div class="vjs-audio-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-audio-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Audio Track" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Audio Track</span></button><div class="vjs-menu"><ul class="vjs-menu-content"><li class="vjs-menu-item vjs-selected vjs-main-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">default</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><button class="vjs-picture-in-picture-control vjs-control vjs-button vjs-disabled" type="button" title="Picture-in-Picture" aria-disabled="true" disabled="disabled"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Picture-in-Picture</span></button><button class="vjs-fullscreen-control vjs-control vjs-button" type="button" title="Fullscreen" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Fullscreen</span></button></div><div class="vjs-error-display vjs-modal-dialog vjs-hidden " tabindex="-1" aria-describedby="player_component_509_description" aria-hidden="true" aria-label="Modal Window" role="dialog"><p class="vjs-modal-dialog-description vjs-control-text" id="player_component_509_description">This is a modal window.</p><div class="vjs-modal-dialog-content" role="document"></div></div><div class="vjs-modal-dialog vjs-hidden  vjs-text-track-settings" tabindex="-1" aria-describedby="player_component_515_description" aria-hidden="true" aria-label="Caption Settings Dialog" role="dialog"><p class="vjs-modal-dialog-description vjs-control-text" id="player_component_515_description">Beginning of dialog window. Escape will cancel and close the window.</p><div class="vjs-modal-dialog-content" role="document"><div class="vjs-track-settings-colors"><fieldset class="vjs-fg-color vjs-track-setting"><legend id="captions-text-legend-player_component_515">Text</legend><label id="captions-foreground-color-player_component_515" class="vjs-label">Color</label><select aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515"><option id="captions-foreground-color-player_component_515-White" value="#FFF" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-White">White</option><option id="captions-foreground-color-player_component_515-Black" value="#000" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Black">Black</option><option id="captions-foreground-color-player_component_515-Red" value="#F00" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Red">Red</option><option id="captions-foreground-color-player_component_515-Green" value="#0F0" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Green">Green</option><option id="captions-foreground-color-player_component_515-Blue" value="#00F" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Blue">Blue</option><option id="captions-foreground-color-player_component_515-Yellow" value="#FF0" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Yellow">Yellow</option><option id="captions-foreground-color-player_component_515-Magenta" value="#F0F" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Magenta">Magenta</option><option id="captions-foreground-color-player_component_515-Cyan" value="#0FF" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-color-player_component_515 captions-foreground-color-player_component_515-Cyan">Cyan</option></select><span class="vjs-text-opacity vjs-opacity"><label id="captions-foreground-opacity-player_component_515" class="vjs-label">Transparency</label><select aria-labelledby="captions-text-legend-player_component_515 captions-foreground-opacity-player_component_515"><option id="captions-foreground-opacity-player_component_515-Opaque" value="1" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-opacity-player_component_515 captions-foreground-opacity-player_component_515-Opaque">Opaque</option><option id="captions-foreground-opacity-player_component_515-SemiTransparent" value="0.5" aria-labelledby="captions-text-legend-player_component_515 captions-foreground-opacity-player_component_515 captions-foreground-opacity-player_component_515-SemiTransparent">Semi-Transparent</option></select></span></fieldset><fieldset class="vjs-bg-color vjs-track-setting"><legend id="captions-background-player_component_515">Background</legend><label id="captions-background-color-player_component_515" class="vjs-label">Color</label><select aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515"><option id="captions-background-color-player_component_515-Black" value="#000" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Black">Black</option><option id="captions-background-color-player_component_515-White" value="#FFF" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-White">White</option><option id="captions-background-color-player_component_515-Red" value="#F00" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Red">Red</option><option id="captions-background-color-player_component_515-Green" value="#0F0" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Green">Green</option><option id="captions-background-color-player_component_515-Blue" value="#00F" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Blue">Blue</option><option id="captions-background-color-player_component_515-Yellow" value="#FF0" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Yellow">Yellow</option><option id="captions-background-color-player_component_515-Magenta" value="#F0F" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Magenta">Magenta</option><option id="captions-background-color-player_component_515-Cyan" value="#0FF" aria-labelledby="captions-background-player_component_515 captions-background-color-player_component_515 captions-background-color-player_component_515-Cyan">Cyan</option></select><span class="vjs-bg-opacity vjs-opacity"><label id="captions-background-opacity-player_component_515" class="vjs-label">Transparency</label><select aria-labelledby="captions-background-player_component_515 captions-background-opacity-player_component_515"><option id="captions-background-opacity-player_component_515-Opaque" value="1" aria-labelledby="captions-background-player_component_515 captions-background-opacity-player_component_515 captions-background-opacity-player_component_515-Opaque">Opaque</option><option id="captions-background-opacity-player_component_515-SemiTransparent" value="0.5" aria-labelledby="captions-background-player_component_515 captions-background-opacity-player_component_515 captions-background-opacity-player_component_515-SemiTransparent">Semi-Transparent</option><option id="captions-background-opacity-player_component_515-Transparent" value="0" aria-labelledby="captions-background-player_component_515 captions-background-opacity-player_component_515 captions-background-opacity-player_component_515-Transparent">Transparent</option></select></span></fieldset><fieldset class="vjs-window-color vjs-track-setting"><legend id="captions-window-player_component_515">Window</legend><label id="captions-window-color-player_component_515" class="vjs-label">Color</label><select aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515"><option id="captions-window-color-player_component_515-Black" value="#000" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Black">Black</option><option id="captions-window-color-player_component_515-White" value="#FFF" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-White">White</option><option id="captions-window-color-player_component_515-Red" value="#F00" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Red">Red</option><option id="captions-window-color-player_component_515-Green" value="#0F0" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Green">Green</option><option id="captions-window-color-player_component_515-Blue" value="#00F" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Blue">Blue</option><option id="captions-window-color-player_component_515-Yellow" value="#FF0" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Yellow">Yellow</option><option id="captions-window-color-player_component_515-Magenta" value="#F0F" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Magenta">Magenta</option><option id="captions-window-color-player_component_515-Cyan" value="#0FF" aria-labelledby="captions-window-player_component_515 captions-window-color-player_component_515 captions-window-color-player_component_515-Cyan">Cyan</option></select><span class="vjs-window-opacity vjs-opacity"><label id="captions-window-opacity-player_component_515" class="vjs-label">Transparency</label><select aria-labelledby="captions-window-player_component_515 captions-window-opacity-player_component_515"><option id="captions-window-opacity-player_component_515-Transparent" value="0" aria-labelledby="captions-window-player_component_515 captions-window-opacity-player_component_515 captions-window-opacity-player_component_515-Transparent">Transparent</option><option id="captions-window-opacity-player_component_515-SemiTransparent" value="0.5" aria-labelledby="captions-window-player_component_515 captions-window-opacity-player_component_515 captions-window-opacity-player_component_515-SemiTransparent">Semi-Transparent</option><option id="captions-window-opacity-player_component_515-Opaque" value="1" aria-labelledby="captions-window-player_component_515 captions-window-opacity-player_component_515 captions-window-opacity-player_component_515-Opaque">Opaque</option></select></span></fieldset></div><div class="vjs-track-settings-font"><fieldset class="vjs-font-percent vjs-track-setting"><legend id="captions-font-size-player_component_515" class="">Font Size</legend><select aria-labelledby="captions-font-size-player_component_515"><option id="captions-font-size-player_component_515-50" value="0.50" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-50">50%</option><option id="captions-font-size-player_component_515-75" value="0.75" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-75">75%</option><option id="captions-font-size-player_component_515-100" value="1.00" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-100">100%</option><option id="captions-font-size-player_component_515-125" value="1.25" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-125">125%</option><option id="captions-font-size-player_component_515-150" value="1.50" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-150">150%</option><option id="captions-font-size-player_component_515-175" value="1.75" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-175">175%</option><option id="captions-font-size-player_component_515-200" value="2.00" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-200">200%</option><option id="captions-font-size-player_component_515-300" value="3.00" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-300">300%</option><option id="captions-font-size-player_component_515-400" value="4.00" aria-labelledby="captions-font-size-player_component_515 captions-font-size-player_component_515-400">400%</option></select></fieldset><fieldset class="vjs-edge-style vjs-track-setting"><legend id="player_component_515" class="">Text Edge Style</legend><select aria-labelledby="player_component_515"><option id="player_component_515-None" value="none" aria-labelledby="player_component_515 player_component_515-None">None</option><option id="player_component_515-Raised" value="raised" aria-labelledby="player_component_515 player_component_515-Raised">Raised</option><option id="player_component_515-Depressed" value="depressed" aria-labelledby="player_component_515 player_component_515-Depressed">Depressed</option><option id="player_component_515-Uniform" value="uniform" aria-labelledby="player_component_515 player_component_515-Uniform">Uniform</option><option id="player_component_515-Dropshadow" value="dropshadow" aria-labelledby="player_component_515 player_component_515-Dropshadow">Dropshadow</option></select></fieldset><fieldset class="vjs-font-family vjs-track-setting"><legend id="captions-font-family-player_component_515" class="">Font Family</legend><select aria-labelledby="captions-font-family-player_component_515"><option id="captions-font-family-player_component_515-ProportionalSansSerif" value="proportionalSansSerif" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-ProportionalSansSerif">Proportional Sans-Serif</option><option id="captions-font-family-player_component_515-MonospaceSansSerif" value="monospaceSansSerif" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-MonospaceSansSerif">Monospace Sans-Serif</option><option id="captions-font-family-player_component_515-ProportionalSerif" value="proportionalSerif" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-ProportionalSerif">Proportional Serif</option><option id="captions-font-family-player_component_515-MonospaceSerif" value="monospaceSerif" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-MonospaceSerif">Monospace Serif</option><option id="captions-font-family-player_component_515-Casual" value="casual" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-Casual">Casual</option><option id="captions-font-family-player_component_515-Script" value="script" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-Script">Script</option><option id="captions-font-family-player_component_515-SmallCaps" value="small-caps" aria-labelledby="captions-font-family-player_component_515 captions-font-family-player_component_515-SmallCaps">Small Caps</option></select></fieldset></div><div class="vjs-track-settings-controls"><button type="button" class="vjs-default-button" title="restore all settings to the default values">Reset<span class="vjs-control-text"> restore all settings to the default values</span></button><button type="button" class="vjs-done-button">Done</button></div></div><button class="vjs-close-button vjs-control vjs-button" type="button" title="Close Modal Dialog" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Close Modal Dialog</span></button><p class="vjs-control-text">End of dialog window.</p></div></div>
-      <div class="watermark">𝐑𝐬 𝐋𝐢𝐯𝐞 𝐓𝐯</div>
+
+
+
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/nexus.m3u8"><img src="https://miraz-live-tv.vercel.app/nexus.jpg" alt=""></a></li>
+
+
+
+
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/channeli.m3u8"><img src="https://miraz-live-tv.vercel.app/channeli.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/masranga.m3u8"><img src="https://miraz-live-tv.vercel.app/maasranga.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/somoy.m3u8"><img src="https://miraz-live-tv.vercel.app/somoytv.jpg" alt=""></a></li>
+
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/zee-bangla-cinema.m3u8"><img src="https://miraz-live-tv.vercel.app/Zee_Bangla_Cinema.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/colore-bangla-cinema.m3u8"><img src="colore-bangla-cinema.jpg" alt=""></a></li>
+
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/jalshamovies.m3u8"><img src="jalsha_movies.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/colorsbangla.m3u8"><img src="colorsbangla.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/zeebanglahd.m3u8"><img src="zeebanglahd.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/starjalsha.m3u8"><img src="starjalsha.jpg" alt=""></a></li>
+
+
+
+                        <li class="Cartoon"><a id="myLink" title="Click" href="hls/dis-kid.m3u8"><img src="dis-kid.png" alt=""></a></li>
+                        <li class="Cartoon"><a id="myLink" title="Click" href="hls/nick.m3u8"><img src="nick.jpg" alt=""></a></li>
+                        <li class="Cartoon"><a id="myLink" title="Click" href="hls/cn.m3u8"><img src="cn.png" alt=""></a></li>
+
+                        <li class="Cartoon"><a id="myLink" title="Click" href="hls/pogo.m3u8"><img src="pogo.jpg" alt=""></a></li>
+
+
+                        <li class="Others"><a id="myLink" title="Click" href="hls/madani.m3u8"><img src="madani.jpg" alt=""></a></li>
+                        <li class="Others"><a id="myLink" title="Click" href="hls/qurqntv.m3u8"><img src="quraantv.jpg" alt=""></a></li>
+
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/masti.m3u8"><img src="masti.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/sangeetbangla.m3u8"><img src="sangeet.png" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/axn.m3u8"><img src="axn.jpeg" alt=""></a></li>
+                        <li class="Hindi"><a id="myLink" title="Click" href="hls/bhojpuri.m3u8"><img src="bhojpuri.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/akash.m3u8"><img src="akash8.jfif" alt=""></a></li>
+                        <li class="English"><a id="myLink" title="Click" href="hls/lotus.m3u8"><img src="lotus.png" alt=""></a></li>
+
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/enterr10.m3u8"><img src="enterr10.jpeg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/khushboo.m3u8"><img src="khushboo.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/jamuna.m3u8"><img src="Jamuna.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/gb.m3u8"><img src="gb.png" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/duranta.m3u8"><img src="duranta.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="https://d3j7ofexbkp7q4.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-bl5ti7t9yiazp-ssai-prd/master.m3u8"><img src="nagorik.jpg" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/atn.m3u8"><img src="atntv.png" alt=""></a></li>
+                        <li class="Bangla"><a id="myLink" title="Click" href="hls/banglavision.m3u8"><img src="banglavision.jpg" alt=""></a></li>
+
+
+
+
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <div class="category-wrapper">
-      <div class="channel-arrow prev-channel" onclick="prevChannel()">⏮</div>
-      <div class="category-select">
-        <select id="categoryFilter">
-          <option value="all">𝐀𝐥𝐥 𝐂𝐡𝐚𝐧𝐧𝐞𝐥𝐬</option>
-          <option value="Sports">𝐒𝐩𝐨𝐫𝐭𝐬</option>
-          <option value="Bangladeshi">𝐁𝐚𝐧𝐠𝐥𝐚𝐝𝐞𝐬𝐡𝐢</option>
-          <option value="Kolkata">𝐊𝐨𝐥𝐤𝐚𝐭𝐚</option>
-          <option value="Music">𝐌𝐮𝐬𝐢𝐜</option>
-          <option value="Kids">𝐊𝐢𝐝𝐬</option>
-        </select>
-      </div>
-      <div class="channel-arrow next-channel" onclick="nextChannel()">⏭</div>
-    </div>
+    <a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=7853127&style=0009&nbdigits=5&type=page&initCount=0" title="Free Counter" Alt="web counter"   border="0" /></a>
 
-    <div class="channel-list" id="channelList"><div class="channel active"><div class="fav" onclick="toggleFavorite('Tsports 1', event)">HD</div>
-            <img src="https://i.postimg.cc/sfc07kCn/20250313-225549.png" alt="Tsports 1" style="width:50px;height:50px;"><br>Tsports 1</div><div class="channel"><div class="fav" onclick="toggleFavorite('Tsports 2', event)">HD</div>
-            <img src="https://i.postimg.cc/sfc07kCn/20250313-225549.png" alt="Tsports 2" style="width:50px;height:50px;"><br>Tsports 2</div><div class="channel"><div class="fav" onclick="toggleFavorite('Star Jalsha', event)">HD</div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Star_Jalsha_logo_2023.png" alt="Star Jalsha" style="width:50px;height:50px;"><br>Star Jalsha</div><div class="channel"><div class="fav" onclick="toggleFavorite('Zee Bangla', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4JcChOWsd72TWMOlIm7aFv-t9kSopWnOOduZpE6busV2w2qZ81oA4Fts&amp;s=10" alt="Zee Bangla" style="width:50px;height:50px;"><br>Zee Bangla</div><div class="channel"><div class="fav" onclick="toggleFavorite('Enter10 Bangla ', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSgAr7xYAwX_Fc1CcrfzfFSDwRTbi8FD11fzaEfiA6DMkQ0AZ1dHsPWkM&amp;s=10" alt="Enter10 Bangla " style="width:50px;height:50px;"><br>Enter10 Bangla </div><div class="channel"><div class="fav" onclick="toggleFavorite('Sananda', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTylaokf1TCdYunrrVZdAbn9A1lolFbzxMEmLAOGipEbT9xQaqF4-eo27nn&amp;s=10" alt="Sananda" style="width:50px;height:50px;"><br>Sananda</div><div class="channel"><div class="fav" onclick="toggleFavorite('Tara Cinema', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWwUyv4yOvRJxQRRNROFj3e0LVNjDNNi1eE-OPjPeqW2FwSxfcoZSAM1A&amp;s=10" alt="Tara Cinema" style="width:50px;height:50px;"><br>Tara Cinema</div><div class="channel"><div class="fav" onclick="toggleFavorite('Bangla Plus', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqXKWAk7HXhVSs3Ewv62AN6lHbIYa6aJ7yQ-0SpATAKWFr6KwVmItCyV_8&amp;s=10" alt="Bangla Plus" style="width:50px;height:50px;"><br>Bangla Plus</div><div class="channel"><div class="fav" onclick="toggleFavorite('Amar Digital', event)">HD</div>
-            <img src="https://dthlivetv.com/images/channel_icons/aamar_digital.png" alt="Amar Digital" style="width:50px;height:50px;"><br>Amar Digital</div><div class="channel"><div class="fav" onclick="toggleFavorite('Amar Bangla', event)">HD</div>
-            <img src="https://i.postimg.cc/wvJhyPrw/Amar-Bangla-logo.png" alt="Amar Bangla" style="width:50px;height:50px;"><br>Amar Bangla</div><div class="channel"><div class="fav" onclick="toggleFavorite('Moon Bangla', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhKvBiw19yjowInHgsc79YVBnNzcjPMJ8XDY378bM_fAXEttbkzfl3_R4i&amp;s=10" alt="Moon Bangla" style="width:50px;height:50px;"><br>Moon Bangla</div><div class="channel"><div class="fav" onclick="toggleFavorite('Movie Bangla', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhp9K1xYSAos5HSupXcdwdV6cNVM8KUcYPoQ&amp;s" alt="Movie Bangla" style="width:50px;height:50px;"><br>Movie Bangla</div><div class="channel"><div class="fav" onclick="toggleFavorite('Deepto Tv', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-k4PvFV3oZuw39y2VxtUY7yrYt2-n8U2YTQ&amp;s" alt="Deepto Tv" style="width:50px;height:50px;"><br>Deepto Tv</div><div class="channel"><div class="fav" onclick="toggleFavorite('Deshi Tv', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcaUxayuvUVXfKdv00cGqkVUc02WTWzijdyCUR4svvI0vXpv4R3gZPoHY&amp;s=10" alt="Deshi Tv" style="width:50px;height:50px;"><br>Deshi Tv</div><div class="channel"><div class="fav" onclick="toggleFavorite('Boishakhi Tv', event)">HD</div>
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c7/Boishakhi_TV_logo.svg/640px-Boishakhi_TV_logo.svg.png" alt="Boishakhi Tv" style="width:50px;height:50px;"><br>Boishakhi Tv</div><div class="channel"><div class="fav" onclick="toggleFavorite('My Tv', event)">HD</div>
-            <img src="https://pngtom.com/files/preview/960x960/31703685790qeqh7jxaikd89fvvm7tdeskmf0i51tyadobjvk5dyflpoqy7njnqnent9lypxhhoenilugj7ocx3qlomfrgtlqmicohqssbs7zjp.png" alt="My Tv" style="width:50px;height:50px;"><br>My Tv</div><div class="channel"><div class="fav" onclick="toggleFavorite('IPL 2025', event)">HD</div>
-            <img src="https://i.postimg.cc/rwn28tr8/20250403-193100.png" alt="IPL 2025" style="width:50px;height:50px;"><br>IPL 2025</div><div class="channel"><div class="fav" onclick="toggleFavorite('Massti Subnetwork', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQid6aqF0q8sd-FJPZOGMiHrS1jmCUI_7j1nvfFdghf8-BVz2ATObd1VcVI&amp;s=10" alt="Massti Subnetwork" style="width:50px;height:50px;"><br>Massti Subnetwork</div><div class="channel"><div class="fav" onclick="toggleFavorite('B4U Music', event)">HD</div>
-            <img src="https://jiotvimages.cdn.jio.com/dare_images/images/B4U_Music.png" alt="B4U Music" style="width:50px;height:50px;"><br>B4U Music</div><div class="channel"><div class="fav" onclick="toggleFavorite('Show Box', event)">HD</div>
-            <img src="https://upload.wikimedia.org/wikipedia/en/0/00/ShowBox_TV_logo.png" alt="Show Box" style="width:50px;height:50px;"><br>Show Box</div><div class="channel"><div class="fav" onclick="toggleFavorite('Yrf Music', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/imas?q=tbn:ANd9GcRUD7Ydv_pvSU5ddIrmpLRQnqxxPK0lNaidUa0hfS123XLhmqKnyR83-II&amp;s=10" alt="Yrf Music" style="width:50px;height:50px;"><br>Yrf Music</div><div class="channel"><div class="fav" onclick="toggleFavorite('9x Jalwa', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYD_BYDFjdjS0ZsIkSF7idPP7qQNIKDO-syi_NMI2Dt9CTlXCrXhTMe6pi&amp;s=10" alt="9x Jalwa" style="width:50px;height:50px;"><br>9x Jalwa</div><div class="channel"><div class="fav" onclick="toggleFavorite('Joo Music', event)">HD</div>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRIGAljGXtc_ZMbcqXLAYxCEKHpc37QfNBdEMOjSPEFJoCVlCPAEot5AM&amp;s=10" alt="Joo Music" style="width:50px;height:50px;"><br>Joo Music</div></div>
-  </div>
+    <script src="https://unpkg.com/video.js@7.10.2/dist/video.js"></script>
+    <script src="https://unpkg.com/@videojs/http-streaming@2.4.2/dist/videojs-http-streaming.min.js"></script>
+    <script src="https://miraz-live-tv.vercel.app/scripts.js"></script>
+<style>
+    .container[data-container] {
+    position: absolute;
+    background-color: #000;
+    height: 100%;
+    width: 100%;
+    max-width: 100%
+}
 
-  <div class="footer">©️ 2025 PKTflix Live Tv. All rights reserved.</div>
+.container[data-container] .chromeless {
+    cursor: default
+}
 
-  <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-  <script>
-    const channels = [
-    
-      { name: "Tsports 1", category: "Sports", url: "https://live.tsports.com/mobile_hls/tsports_live_2/playlist.m3u8", logo: "https://i.postimg.cc/sfc07kCn/20250313-225549.png" },
-    
-    { name: "Tsports 2", category: "Sports", url: "https://live.tsports.com/mobile_hls/tsports_live_1/playlist.m3u8", logo: "https://i.postimg.cc/sfc07kCn/20250313-225549.png" },
+[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {
+    cursor: pointer
+}
 
-      
-      { name: "Star Jalsha", category: "Kolkata", url: "https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8", logo: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Star_Jalsha_logo_2023.png" },
-      
-      { name: "Zee Bangla", category: "Kolkata", url: "https://catchup.yuppcdn.net/amazonv2/36/preview/zeebangla/master/chunklist.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4JcChOWsd72TWMOlIm7aFv-t9kSopWnOOduZpE6busV2w2qZ81oA4Fts&s=10" },
-      
-      { name: "Enter10 Bangla ", category: "Kolkata", url: "https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_720p/chunks.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSgAr7xYAwX_Fc1CcrfzfFSDwRTbi8FD11fzaEfiA6DMkQ0AZ1dHsPWkM&s=10" },
-      
-      { name: "Sananda", category: "Kolkata", url: "https://live.sanonda.tv/sanonda/index.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTylaokf1TCdYunrrVZdAbn9A1lolFbzxMEmLAOGipEbT9xQaqF4-eo27nn&s=10" },
-      
-      { name: "Tara Cinema", category: "Kolkata", url: "http://103.145.48.150:90/laosat24/taratv/index.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWwUyv4yOvRJxQRRNROFj3e0LVNjDNNi1eE-OPjPeqW2FwSxfcoZSAM1A&s=10" },
-      
-      { name: "Bangla Plus", category: "Kolkata", url: "https://live-stream.utkalbongo.com/hls/livebanglatvstream.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqXKWAk7HXhVSs3Ewv62AN6lHbIYa6aJ7yQ-0SpATAKWFr6KwVmItCyV_8&s=10" },
-      
-      { name: "Amar Digital", category: "Kolkata", url: "https://live-stream.utkalbongo.com/utkalbongo/stream2/hls/amarbanglatwolivestream.m3u8", logo: "https://dthlivetv.com/images/channel_icons/aamar_digital.png" },
-      
-      { name: "Amar Bangla", category: "Kolkata", url: "https://live-stream.utkalbongo.com/utkalbongo/stream10/hls/amarbangla.m3u8", logo: "https://i.postimg.cc/wvJhyPrw/Amar-Bangla-logo.png" },
-      
-      { name: "Moon Bangla", category: "Kolkata", url: "https://live-stream.utkalbongo.com/utkalbongo/stream7/hls/montvlivestream.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhKvBiw19yjowInHgsc79YVBnNzcjPMJ8XDY378bM_fAXEttbkzfl3_R4i&s=10" },
-      
-      { name: "Movie Bangla", category: "Bangladeshi", url: "http://alvetv.com/moviebanglatv/8080/index.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhp9K1xYSAos5HSupXcdwdV6cNVM8KUcYPoQ&s" },
-      
-      { name: "Deepto Tv", category: "Bangladeshi", url: "https://byphdgllyk.gpcdn.net/hls/deeptotv/index.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-k4PvFV3oZuw39y2VxtUY7yrYt2-n8U2YTQ&s" },
-      
-      { name: "Deshi Tv", category: "Bangladeshi", url: "https://deshitv.deshitv24.net/live/myStream/playlist.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcaUxayuvUVXfKdv00cGqkVUc02WTWzijdyCUR4svvI0vXpv4R3gZPoHY&s=10" },
-      
-      { name: "Boishakhi Tv", category: "Bangladeshi", url: "https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c7/Boishakhi_TV_logo.svg/640px-Boishakhi_TV_logo.svg.png" },
-      
-      { name: "My Tv", category: "Bangladeshi", url: "https://mytvbangla.com/0.m3u8", logo: "https://pngtom.com/files/preview/960x960/31703685790qeqh7jxaikd89fvvm7tdeskmf0i51tyadobjvk5dyflpoqy7njnqnent9lypxhhoenilugj7ocx3qlomfrgtlqmicohqssbs7zjp.png" },{ name: "IPL 2025", category: "Sports", url: "http://kst.moonplex.net:8080/CH10/tracks-v1a1/mono.m3u8", logo: "https://i.postimg.cc/rwn28tr8/20250403-193100.png" },
-      
-      { name: "Massti Subnetwork", category: "Music", url: "https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/mastiii/master.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQid6aqF0q8sd-FJPZOGMiHrS1jmCUI_7j1nvfFdghf8-BVz2ATObd1VcVI&s=10" },
-      
-      { name: "B4U Music", category: "Music", url: "https://d3kdywbtdfbp9z.cloudfront.net/v1/manifest/93ce20f0f52760bf38be911ff4c91ed02aa2fd92/dff423e0-3c82-46d6-9ecb-3baa96b5694a/4598c408-0e38-488c-9b64-fc845d1ea2b6/0.m3u8", logo: "https://jiotvimages.cdn.jio.com/dare_images/images/B4U_Music.png" },
-      
-      { name: "Show Box", category: "Music", url: "https://epiconvh.akamaized.net/live/showbox/master.m3u8", logo: "https://upload.wikimedia.org/wikipedia/en/0/00/ShowBox_TV_logo.png" },
-      
-      { name: "Yrf Music", category: "Music", url: "https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUD7Ydv_pvSU5ddIrmpLRQnqxxPK0lNaidUa0hfS123XLhmqKnyR83-II&s=10" },
-      
-      { name: "9x Jalwa", category: "Sports", url: "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/9x-jalwa/47bdb49d-f6f3-4927-a9ea-12c4c5afc732/0.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYD_BYDFjdjS0ZsIkSF7idPP7qQNIKDO-syi_NMI2Dt9CTlXCrXhTMe6pi&s=10" },
-      
-      { name: "Joo Music", category: "Music", url: "https://livecdn.live247stream.com/joomusic/tv/playlist.m3u8", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRIGAljGXtc_ZMbcqXLAYxCEKHpc37QfNBdEMOjSPEFJoCVlCPAEot5AM&s=10" }
-      
-    ];
-    const player = videojs("player");
-    const channelList = document.getElementById("channelList");
-    let currentIndex = 0;
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+[data-player] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+    overflow: hidden;
+    font-size: 100%;
+    font-family: Roboto, Open Sans, Arial, sans-serif;
+    text-shadow: 0 0 0;
+    box-sizing: border-box
+}
 
-    function loadChannel(index) {
-      const channel = channels[index];
-      player.src({ type: "application/x-mpegURL", src: channel.url });
-      player.play();
-      currentIndex = index;
-      document.querySelectorAll('.channel').forEach((el, i) => {
-        el.classList.toggle('active', i === index);
-      });
+[data-player] a,
+[data-player] abbr,
+[data-player] acronym,
+[data-player] address,
+[data-player] applet,
+[data-player] article,
+[data-player] aside,
+[data-player] audio,
+[data-player] b,
+[data-player] big,
+[data-player] blockquote,
+[data-player] canvas,
+[data-player] caption,
+[data-player] center,
+[data-player] cite,
+[data-player] code,
+[data-player] dd,
+[data-player] del,
+[data-player] details,
+[data-player] dfn,
+[data-player] div,
+[data-player] dl,
+[data-player] dt,
+[data-player] em,
+[data-player] embed,
+[data-player] fieldset,
+[data-player] figcaption,
+[data-player] figure,
+[data-player] footer,
+[data-player] form,
+[data-player] h1,
+[data-player] h2,
+[data-player] h3,
+[data-player] h4,
+[data-player] h5,
+[data-player] h6,
+[data-player] header,
+[data-player] hgroup,
+[data-player] i,
+[data-player] iframe,
+[data-player] img,
+[data-player] ins,
+[data-player] kbd,
+[data-player] label,
+[data-player] legend,
+[data-player] li,
+[data-player] mark,
+[data-player] menu,
+[data-player] nav,
+[data-player] object,
+[data-player] ol,
+[data-player] output,
+[data-player] p,
+[data-player] pre,
+[data-player] q,
+[data-player] ruby,
+[data-player] s,
+[data-player] samp,
+[data-player] section,
+[data-player] small,
+[data-player] span,
+[data-player] strike,
+[data-player] strong,
+[data-player] sub,
+[data-player] summary,
+[data-player] sup,
+[data-player] table,
+[data-player] tbody,
+[data-player] td,
+[data-player] tfoot,
+[data-player] th,
+[data-player] thead,
+[data-player] time,
+[data-player] tr,
+[data-player] tt,
+[data-player] u,
+[data-player] ul,
+[data-player] var,
+[data-player] video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline
+}
+
+[data-player] table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+[data-player] caption,
+[data-player] td,
+[data-player] th {
+    text-align: left;
+    font-weight: 400;
+    vertical-align: middle
+}
+
+[data-player] blockquote,
+[data-player] q {
+    quotes: none
+}
+
+[data-player] blockquote:after,
+[data-player] blockquote:before,
+[data-player] q:after,
+[data-player] q:before {
+    content: "";
+    content: none
+}
+
+[data-player] a img {
+    border: none
+}
+
+[data-player]:focus {
+    outline: 0
+}
+
+[data-player] * {
+    max-width: none;
+    box-sizing: inherit;
+    float: none
+}
+
+[data-player] div {
+    display: block
+}
+
+[data-player].fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    left: 0
+}
+
+[data-player].nocursor {
+    cursor: none
+}
+
+.clappr-style {
+    display: none !important
+}
+
+[data-html5-video] {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: block
+}
+
+.clappr-flash-playback[data-flash-playback] {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none
+}
+
+[data-html-img] {
+    max-width: 100%;
+    max-height: 100%
+}
+
+[data-no-op] {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    text-align: center
+}
+
+[data-no-op] p[data-no-op-msg] {
+    position: absolute;
+    text-align: center;
+    font-size: 25px;
+    left: 0;
+    right: 0;
+    color: #fff;
+    padding: 10px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    max-height: 100%;
+    overflow: auto
+}
+
+[data-no-op] canvas[data-no-op-canvas] {
+    background-color: #777;
+    height: 100%;
+    width: 100%
+}
+
+.spinner-three-bounce[data-spinner] {
+    position: absolute;
+    margin: 0 auto;
+    width: 70px;
+    text-align: center;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
+
+.spinner-three-bounce[data-spinner]>div {
+    width: 18px;
+    height: 18px;
+    background-color: #fff;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+    animation: bouncedelay 1.4s infinite ease-in-out;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}
+
+.spinner-three-bounce[data-spinner] [data-bounce1] {
+    -webkit-animation-delay: -.32s;
+    animation-delay: -.32s
+}
+
+.spinner-three-bounce[data-spinner] [data-bounce2] {
+    -webkit-animation-delay: -.16s;
+    animation-delay: -.16s
+}
+
+@-webkit-keyframes bouncedelay {
+    0%,
+    80%,
+    to {
+        -webkit-transform: scale(0);
+        transform: scale(0)
     }
-
-    function renderChannels(category = "all") {
-      channelList.innerHTML = "";
-      channels.forEach((channel, index) => {
-        const match = category === "all" || (category === "Favorites" ? favorites.includes(channel.name) : channel.category === category);
-        if (match) {
-          const div = document.createElement("div");
-          div.className = "channel";
-          div.innerHTML = `<div class="fav" onclick="toggleFavorite('${channel.name}', event)">HD</div>
-            <img src="${channel.logo}" alt="${channel.name}" style="width:50px;height:50px;"><br>${channel.name}`;
-          div.onclick = () => loadChannel(index);
-          if (channel.name === channels[currentIndex].name) div.classList.add("active");
-          channelList.appendChild(div);
-        }
-      });
+    40% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
     }
+}
 
-    function toggleFavorite(name, event) {
-      event.stopPropagation();
-      const idx = favorites.indexOf(name);
-      if (idx > -1) favorites.splice(idx, 1);
-      else favorites.push(name);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
-      renderChannels(document.getElementById("categoryFilter").value);
+@keyframes bouncedelay {
+    0%,
+    80%,
+    to {
+        -webkit-transform: scale(0);
+        transform: scale(0)
     }
+    40% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
 
-    document.getElementById("categoryFilter").addEventListener("change", e => {
-      renderChannels(e.target.value);
+.clappr-watermark[data-watermark] {
+    position: absolute;
+    min-width: 70px;
+    max-width: 200px;
+    width: 12%;
+    text-align: center;
+    z-index: 10
+}
+
+.clappr-watermark[data-watermark] a {
+    outline: none;
+    cursor: pointer
+}
+
+.clappr-watermark[data-watermark] img {
+    max-width: 100%
+}
+
+.clappr-watermark[data-watermark-bottom-left] {
+    bottom: 10px;
+    left: 10px
+}
+
+.clappr-watermark[data-watermark-bottom-right] {
+    bottom: 10px;
+    right: 42px
+}
+
+.clappr-watermark[data-watermark-top-left] {
+    top: 10px;
+    left: 10px
+}
+
+.clappr-watermark[data-watermark-top-right] {
+    top: 10px;
+    right: 37px
+}
+
+.player-poster[data-poster] {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 998;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%
+}
+
+.player-poster[data-poster].clickable {
+    cursor: pointer
+}
+
+.player-poster[data-poster]:hover .play-wrapper[data-poster] {
+    opacity: 1
+}
+
+.player-poster[data-poster] .play-wrapper[data-poster] {
+    width: 100%;
+    height: 25%;
+    margin: 0 auto;
+    opacity: .75;
+    transition: opacity .1s ease
+}
+
+.player-poster[data-poster] .play-wrapper[data-poster] svg {
+    height: 100%
+}
+
+.player-poster[data-poster] .play-wrapper[data-poster] svg path {
+    fill: #fff
+}
+
+.media-control-notransition {
+    transition: none !important
+}
+
+.media-control[data-media-control] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none
+}
+
+.media-control[data-media-control].dragging {
+    pointer-events: auto;
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
+    cursor: url(<%=baseUrl%>/a8c874b93b3d848f39a71260c57e3863.cur), move
+}
+
+.media-control[data-media-control].dragging * {
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
+    cursor: url(<%=baseUrl%>/a8c874b93b3d848f39a71260c57e3863.cur), move
+}
+
+.media-control[data-media-control] .media-control-background[data-background] {
+    position: absolute;
+    height: 40%;
+    width: 100%;
+    bottom: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .9));
+    transition: opacity .6s ease-out
+}
+
+.media-control[data-media-control] .media-control-icon {
+    line-height: 0;
+    letter-spacing: 0;
+    speak: none;
+    color: #fff;
+    opacity: .5;
+    vertical-align: middle;
+    text-align: left;
+    transition: all .1s ease
+}
+
+.media-control[data-media-control] .media-control-icon:hover {
+    color: #fff;
+    opacity: .75;
+    text-shadow: hsla(0, 0%, 100%, .8) 0 0 5px
+}
+
+.media-control[data-media-control].media-control-hide .media-control-background[data-background] {
+    opacity: 0
+}
+
+.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {
+    bottom: -50px
+}
+
+.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {
+    opacity: 0
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] {
+    position: absolute;
+    bottom: 7px;
+    width: 100%;
+    height: 32px;
+    font-size: 0;
+    vertical-align: middle;
+    pointer-events: auto;
+    transition: bottom .4s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    height: 100%
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {
+    height: 100%;
+    text-align: center;
+    line-height: 32px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    height: 100%
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {
+    background-color: transparent;
+    border: 0;
+    margin: 0 6px;
+    padding: 0;
+    cursor: pointer;
+    display: inline-block;
+    width: 32px;
+    height: 100%
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {
+    width: 100%;
+    height: 22px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {
+    fill: #fff
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {
+    outline: none
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause],
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play],
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {
+    float: left;
+    height: 100%
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {
+    float: right;
+    background-color: transparent;
+    border: 0;
+    height: 100%
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {
+    background-color: transparent;
+    border: 0;
+    cursor: default;
+    display: none;
+    float: right;
+    height: 100%
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {
+    display: block;
+    opacity: 1
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {
+    opacity: 1;
+    text-shadow: none
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause],
+.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {
+    float: left
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {
+    display: inline-block;
+    font-size: 10px;
+    color: #fff;
+    cursor: default;
+    line-height: 32px;
+    position: relative
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {
+    margin: 0 6px 0 7px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {
+    color: hsla(0, 0%, 100%, .5);
+    margin-right: 6px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {
+    content: "|";
+    margin-right: 7px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    height: 25px;
+    cursor: pointer
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {
+    width: 100%;
+    height: 1px;
+    position: relative;
+    top: 12px;
+    background-color: #666
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #c2c2c2;
+    transition: all .1s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #005aff;
+    transition: all .1s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {
+    opacity: 0;
+    position: absolute;
+    top: -3px;
+    width: 5px;
+    height: 7px;
+    background-color: hsla(0, 0%, 100%, .5);
+    transition: opacity .1s ease
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {
+    opacity: 1
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {
+    cursor: default
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {
+    opacity: 0
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {
+    position: absolute;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 2px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    transition: all .1s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 6px hsla(0, 0%, 100%, .2);
+    background-color: #fff
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {
+    float: right;
+    display: inline-block;
+    height: 32px;
+    cursor: pointer;
+    margin: 0 6px;
+    box-sizing: border-box
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {
+    float: left;
+    bottom: 0
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {
+    background-color: transparent;
+    border: 0;
+    box-sizing: content-box;
+    width: 32px;
+    height: 32px;
+    opacity: .5
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {
+    opacity: .75
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {
+    height: 24px;
+    position: relative;
+    top: 3px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {
+    fill: #fff
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {
+    margin-left: 2px
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {
+    float: left;
+    position: relative;
+    overflow: hidden;
+    top: 6px;
+    width: 42px;
+    height: 18px;
+    padding: 3px 0;
+    transition: width .2s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {
+    height: 1px;
+    position: relative;
+    top: 7px;
+    margin: 0 3px;
+    background-color: #666
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #c2c2c2;
+    transition: all .1s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #005aff;
+    transition: all .1s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {
+    opacity: 0;
+    position: absolute;
+    top: -3px;
+    width: 5px;
+    height: 7px;
+    background-color: hsla(0, 0%, 100%, .5);
+    transition: opacity .1s ease
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {
+    position: absolute;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    transition: all .1s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 6px hsla(0, 0%, 100%, .2);
+    background-color: #fff
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {
+    float: left;
+    width: 4px;
+    padding-left: 2px;
+    height: 12px;
+    opacity: .5;
+    box-shadow: inset 2px 0 0 #fff;
+    transition: -webkit-transform .2s ease-out;
+    transition: transform .2s ease-out;
+    transition: transform .2s ease-out, -webkit-transform .2s ease-out
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {
+    box-shadow: inset 2px 0 0 #fff;
+    opacity: 1
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:first-of-type {
+    padding-left: 0
+}
+
+.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {
+    -webkit-transform: scaleY(1.5);
+    transform: scaleY(1.5)
+}
+
+.media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {
+    width: 0;
+    height: 12px;
+    top: 9px;
+    padding: 0
+}
+
+.dvr-controls[data-dvr-controls] {
+    display: inline-block;
+    float: left;
+    color: #fff;
+    line-height: 32px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 6px
+}
+
+.dvr-controls[data-dvr-controls] .live-info {
+    cursor: default;
+    font-family: Roboto, Open Sans, Arial, sans-serif;
+    text-transform: uppercase
+}
+
+.dvr-controls[data-dvr-controls] .live-info:before {
+    content: "";
+    display: inline-block;
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 3.5px;
+    margin-right: 3.5px;
+    background-color: #ff0101
+}
+
+.dvr-controls[data-dvr-controls] .live-info.disabled {
+    opacity: .3
+}
+
+.dvr-controls[data-dvr-controls] .live-info.disabled:before {
+    background-color: #fff
+}
+
+.dvr-controls[data-dvr-controls] .live-button {
+    cursor: pointer;
+    outline: none;
+    display: none;
+    border: 0;
+    color: #fff;
+    background-color: transparent;
+    height: 32px;
+    padding: 0;
+    opacity: .7;
+    font-family: Roboto, Open Sans, Arial, sans-serif;
+    text-transform: uppercase;
+    transition: all .1s ease
+}
+
+.dvr-controls[data-dvr-controls] .live-button:before {
+    content: "";
+    display: inline-block;
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 3.5px;
+    margin-right: 3.5px;
+    background-color: #fff
+}
+
+.dvr-controls[data-dvr-controls] .live-button:hover {
+    opacity: 1;
+    text-shadow: hsla(0, 0%, 100%, .75) 0 0 5px
+}
+
+.dvr .dvr-controls[data-dvr-controls] .live-info {
+    display: none
+}
+
+.dvr .dvr-controls[data-dvr-controls] .live-button {
+    display: block
+}
+
+.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+    background-color: #005aff
+}
+
+.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+    background-color: #ff0101
+}
+
+.cc-controls[data-cc-controls] {
+    float: right;
+    position: relative;
+    display: none
+}
+
+.cc-controls[data-cc-controls].available {
+    display: block
+}
+
+.cc-controls[data-cc-controls] .cc-button {
+    padding: 6px !important
+}
+
+.cc-controls[data-cc-controls] .cc-button.enabled {
+    display: block;
+    opacity: 1
+}
+
+.cc-controls[data-cc-controls] .cc-button.enabled:hover {
+    opacity: 1;
+    text-shadow: none
+}
+
+.cc-controls[data-cc-controls]>ul {
+    list-style-type: none;
+    position: absolute;
+    bottom: 25px;
+    border: 1px solid #000;
+    display: none;
+    background-color: #e6e6e6
+}
+
+.cc-controls[data-cc-controls] li {
+    font-size: 10px
+}
+
+.cc-controls[data-cc-controls] li[data-title] {
+    background-color: #c3c2c2;
+    padding: 5px
+}
+
+.cc-controls[data-cc-controls] li a {
+    color: #444;
+    padding: 2px 10px;
+    display: block;
+    text-decoration: none
+}
+
+.cc-controls[data-cc-controls] li a:hover {
+    background-color: #555;
+    color: #fff
+}
+
+.cc-controls[data-cc-controls] li a:hover a {
+    color: #fff;
+    text-decoration: none
+}
+
+.cc-controls[data-cc-controls] li.current a {
+    color: red
+}
+
+.seek-time[data-seek-time] {
+    position: absolute;
+    white-space: nowrap;
+    height: 20px;
+    line-height: 20px;
+    font-size: 0;
+    left: -100%;
+    bottom: 55px;
+    background-color: rgba(2, 2, 2, .5);
+    z-index: 9999;
+    transition: opacity .1s ease
+}
+
+.seek-time[data-seek-time].hidden[data-seek-time] {
+    opacity: 0
+}
+
+.seek-time[data-seek-time] [data-seek-time] {
+    display: inline-block;
+    color: #fff;
+    font-size: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+    vertical-align: top
+}
+
+.seek-time[data-seek-time] [data-duration] {
+    display: inline-block;
+    color: hsla(0, 0%, 100%, .5);
+    font-size: 10px;
+    padding-right: 7px;
+    vertical-align: top
+}
+
+.seek-time[data-seek-time] [data-duration]:before {
+    content: "|";
+    margin-right: 7px
+}
+
+div.player-error-screen {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #cccaca;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .7);
+    z-index: 2000;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+div.player-error-screen__content[data-error-screen] {
+    font-size: 14px;
+    color: #cccaca;
+    margin-top: 45px
+}
+
+div.player-error-screen__title[data-error-screen] {
+    font-weight: 700;
+    line-height: 30px;
+    font-size: 18px
+}
+
+div.player-error-screen__message[data-error-screen] {
+    width: 90%;
+    margin: 0 auto
+}
+
+div.player-error-screen__code[data-error-screen] {
+    font-size: 13px;
+    margin-top: 15px
+}
+
+div.player-error-screen__reload {
+    cursor: pointer;
+    width: 30px;
+    margin: 15px auto 0
+}
+@import url('https://fonts.googleapis.com/css?family=Rambla:400i');
+body {
+    font-family: "myriad pro", tahoma, verdana, arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    background: #000 url(/live/img/bgu.jpg) top center;
+    color: #00abff;
+}
+
+.tv-area {
+    margin-top: 50px;
+}
+
+.channel-list {
+    margin-top: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+.thumbnail-slider {
+    margin: 0;
+    padding: 0;
+}
+
+.thumbnail-slider ul,
+.thumbnail-slider ul li {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.thumbnail-slider li {
+    width: 23%;
+    height: 75px;
+    margin: 5px 1%;
+    list-style: none;
+}
+
+.thumbnail-slider li img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+}
+
+.channel-list::-webkit-scrollbar {
+    width: 12px;
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.channel-list::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #D62929;
+}
+
+/*[data-player] { position: relative; width: 100%; height: auto; margin: 0; }
+[data-player] .container[data-container] { width: 100%; height: auto; position: relative; }
+[data-player] .media-control[data-media-control] { top: 0; right: 0; bottom: 0; left: 0; }
+[data-player] video { position: relative; display: block; width: 100%; height: auto; }*/
+
+/*
+@media (max-width: 1199px) {
+    .channel-list { height: 425px; }
+}
+@media (max-width: 990px) {
+    .channel-list { padding: 10px 15px; height: auto !important; overflow-y: hidden; overflow-x: auto; }
+    .thumbnail-slider li { display: inline-block; margin: 0 5px 0 0; }
+    .thumbnail-slider li a { display: block; width: 80px; }
+}
+@media (max-width: 410px) {
+    .thumbnail-slider li a { width: 50px; }
+}*/
+</style>
+<script>
+var vgsPlayer, poster;
+vgsPlayer = videojs('vid1');
+vgsPlayer.poster('https://img.youtube.com/vi/aqz-KE-bpKQ/maxresdefault.jpg');
+
+/********* LOAD URL *********/
+$('#vidlink li a').on('click', function(e) {
+    e.preventDefault();
+    var vidlink = $(this).attr('href');
+    vsgLoadVideo(vidlink);
+    //$('#vsg-vurl').val(vidlink);  
+    //$('input[type=submit]').click();
+});
+
+jQuery(function($) {
+
+
+    $("#vidlink li").css('display', 'none');
+    $("#vidlink .Bangla").css('display', '');
+
+    $(".channel-list .nav-link").click(function() {
+        $(".channel-list .nav-link").removeClass('active');
+
+        $(this).addClass('active');
+
+        var ShowClass = $(this).data('type');
+
+        $("#vidlink li").css('display', 'none');
+        $("#vidlink ." + ShowClass).css('display', '');
     });
 
-    function prevChannel() {
-      currentIndex = (currentIndex === 0) ? channels.length - 1 : currentIndex - 1;
-      loadChannel(currentIndex);
-    }
-
-    function nextChannel() {
-      currentIndex = (currentIndex === channels.length - 1) ? 0 : currentIndex + 1;
-      loadChannel(currentIndex);
-    }
-
-    function updateClock() {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      const hour12 = hours % 12 || 12;
-      const time = hour12 + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
-      document.getElementById('clock').textContent = time;
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-    renderChannels();
-    loadChannel(0);
-
-    // Security: Right-click ও DevTools Block
-    document.addEventListener('contextmenu', event => event.preventDefault());
-
-    document.addEventListener('keydown', function(e) {
-      if (
-        e.keyCode === 123 || // F12
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || // Ctrl+Shift+I/J
-        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
-      ) {
+    $("#vsg-loadvideo").submit(function(e) {
         e.preventDefault();
-      }
+
+        var vidURL = $("#vsg-vurl").val();
+
+        vsgLoadVideo(vidURL);
+
     });
 
-    function detectDevTools() {
-      const element = new Image();
-      Object.defineProperty(element, 'id', {
-        get: function () {
-          alert('DevTools ডিটেক্ট করা হয়েছে!');
-          window.location.href = 'about:blank';
-        }
-      });
-      console.log(element);
+});
+
+
+function vsgLoadVideo(vidURL, poster) {
+    var type = getType(vidURL);
+
+    if (getId(vidURL))
+        poster = "http://img.youtube.com/vi/" + getId(vidURL) + "/hqdefault.jpg";
+
+    vgsPlayer.src({
+        "src": vidURL,
+        "type": type
+    });
+    if (poster)
+        vgsPlayer.poster(poster);
+    else
+        vgsPlayer.poster("//i.imgur.com/aE0LoTe.png");
+
+    // play seem to trigger to fast before Youtube is ready
+
+    //vgsPlayer.pause();
+    //	vgsPlayer.load();
+    vgsPlayer.play();
+    /*   setTimeout(function() {
+     vgsPlayer.play();
+     }, 500); */
+
+    return false;
+
+}
+
+
+function ytVidId(url) {
+    //var p = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+    //var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+
+    if (url.match(p) || getId(url).length == 11)
+        return false;
+}
+
+/**/
+function getId(url) {
+    //var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+
+    if (match && match[2].length == 11) {
+        return match[2];
+    } else {
+        return false;
     }
+}
 
-    setInterval(detectDevTools, 3000);
-  </script>
-  
+var rtmp_suffix = /^rtmp:\/\//;
+var hls_suffix = /\.m3u8/;
+var mp4_suffix = /\.(mp4|m4p|m4v|mov)/i;
+var hds_suffix = /\.f4m/;
+var dash_suffix = /\.mpd/;
+var flv_suffix = /\.flv/;
+var webm_suffix = /\.webm/;
+/* AUDIO */
+//var mp3_suffix = /\.mp3/;
+var mpeg_suffix = /\.(mp3|m4a)/i;
+var ogg_suffix = /\.ogg/;
 
+//var youtube_suffix = /\.youtube.com/;
+//var yt_suffix = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+var yt_suffix = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+var dm_suffix = /\.?dailymotion.com/;
+var vm_suffix = /\.?vimeo.com/;
+/* ADVANCED REGEX */
+//      var regVimeo = /^.*(vimeo.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
+//      var regDailymotion = /^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/;
+//      var regMetacafe = /^.*(metacafe.com)(\/watch\/)(d+)(.*)/i;
+//      var youtube_suffix = /(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
 
-</body></html>
+function getType(url) {
+
+    /* AUDIO */
+    if (mpeg_suffix.test(url))
+        return 'audio/mpeg';
+    if (ogg_suffix.test(url))
+        return 'audio/ogg';
+    if (dash_suffix.test(url))
+        return 'application/dash+xml';
+    if (rtmp_suffix.test(url))
+        return 'rtmp/mp4';
+    if (hls_suffix.test(url))
+        return 'application/x-mpegurl';
+    if (mp4_suffix.test(url))
+        return 'video/mp4';
+    if (hds_suffix.test(url))
+        return 'application/adobe-f4m';
+    if (flv_suffix.test(url))
+        return 'video/flv';
+    if (webm_suffix.test(url))
+        return 'video/webm';
+    if (yt_suffix.test(url)) {
+        //alert(url.match(yt_suffix)[2]);
+        //player.poster(ytmaxres(url.match(yt_suffix)[2]));
+        //alert(ytmaxres(url.match(yt_suffix)[2]));
+        return 'video/youtube';
+    }
+    if (dm_suffix.test(url))
+        return 'video/dailymotion';
+    if (vm_suffix.test(url))
+        return 'video/vimeo';
+
+    console.log('could not guess link type: "' + url + '" assuming mp4');
+    return 'video/mp4';
+};
+
+function getExt(ext) {
+
+    //if (ext == "youtube") ext = "mp4";
+    if (ext == "mp4" || ext == "m4v")
+        ext = "m4v";
+    if (ext == "ogg" || ext == "ogv")
+        ext = "oga";
+    if (ext == "webm")
+        ext = "webmv";
+
+    return ext;
+}
+</script>
+</body>
+
+</html>
