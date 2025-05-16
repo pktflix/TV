@@ -53,6 +53,11 @@
                         <video id="vid1" class="video-js vjs-default-skin vjs-fluid" poster="http://i.imgur.com/xxqm7EE.png" width="640" height="360" controls autoplay preload="none" data-setup='{ "techOrder": ["html5", "flash", "youtube"], "sources": [{ "type": "application/x-mpegURL", "src": "https://nmxlive.akamaized.net/hls/live/529965/Live_1/index.m3u8"}]}'></video>
                     </div>
                 </div>
+<div style="width:100%; display:flex; justify-content:center; margin-top:20px;">
+  <div style="width:728px; height:90px; background:#ddd; text-align:center; line-height:90px; font-weight:bold;">
+    Banner Ad Placeholder (728x90)
+  </div>
+</div>
 <div style="background-color: red; color: white; text-align: center; padding: 10px; font-weight: bold; margin-top: 15px;">
   ভিডিও প্লে হতে ৩০/৫০ সেকেন্ড সময় লাগতে পারে একটু অপেক্ষা করুন। কোনো সমস্যা হলে আমাদের গ্রুপে জানান। ধন্যবাদ
 </div>
@@ -130,9 +135,9 @@
 
 
                         <li class="Sports"><a id="myLink" title="Click" href="https://live.tsports.com/?bitrate=1500000&channel=tsports_live_2_1080&res=1080"><img src="https://miraz-live-tv.vercel.app/Sony-six-hd.png" alt=""></a></li>
-                        <li class="Sports"><a id="myLink" title="Click" href="http://tigerott.com:8080/live/0583333/111111/75331.ts"><img src="https://miraz-live-tv.vercel.app/euro.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="http://103.145.48.150:90/laosat24/taratv/tracks-v1a1/mono.m3u8"><img src="https://miraz-live-tv.vercel.app/euro.jpg" alt=""></a></li>
                         <li class="Sports"><a id="myLink" title="Click" href="https://live-stream.utkalbongo.com/utkalbongo/stream10/hls/amarbangla.m3u8"><img src="https://miraz-live-tv.vercel.app/Star_Sports_Select_1_HD.jpg" alt=""></a></li>
-                        <li class="Sports"><a id="myLink" title="Click" href="http://175.107.244.52:4457/play/a06u/index.m3u8"><img src="https://miraz-live-tv.vercel.app/stersports1hd.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/stersports1hd.m3u8"><img src="https://miraz-live-tv.vercel.app/stersports1hd.jpg" alt=""></a></li>
                         <li class="Sports"><a id="myLink" title="Click" href="hls/starsports2.m3u8"><img src="https://miraz-live-tv.vercel.app/ster-sport-2hd.png" alt=""></a></li>
 
                         <li class="Sports"><a id="myLink" title="Click" href="hls/sonyten3.m3u8"><img src="https://miraz-live-tv.vercel.app/sonyten3.jpg" alt=""></a></li>
@@ -142,7 +147,7 @@
                         <li class="Sports"><a id="myLink" title="Click" href="https://live.tsports.com/live/tsports_live_720/index.m3u8"><img src="https://miraz-live-tv.vercel.app/tsports.jpg" alt=""></a></li>
 
                         <li class="Sports"><a id="myLink" title="Click" href="hls/ten.m3u8"><img src="https://miraz-live-tv.vercel.app/ten_sports.jpg" alt=""></a></li>
-                        <li class="Sports"><a id="myLink" title="Click" href="http://tigerott.com:8080/live/0583333/111111/49598.ts"><img src="ptv.jpg" alt=""></a></li>
+                        <li class="Sports"><a id="myLink" title="Click" href="hls/ptv.m3u8"><img src="ptv.jpg" alt=""></a></li>
 
                         <li class="Bangla"><a id="myLink" title="Click" href="http://tigerott.com:8080/live/0583333/111111/75331.ts"><img src="https://miraz-live-tv.vercel.app/sunbangla.jpg" alt=""></a></li>
 
@@ -1310,9 +1315,8 @@ body {
 /*[data-player] { position: relative; width: 100%; height: auto; margin: 0; }
 [data-player] .container[data-container] { width: 100%; height: auto; position: relative; }
 [data-player] .media-control[data-media-control] { top: 0; right: 0; bottom: 0; left: 0; }
-[data-player] video { position: relative; display: block; width: 100%; height: auto; }*/
+[data-player] video { position: relative; display: block; width: 100%; height: auto; }
 
-/*
 @media (max-width: 1199px) {
     .channel-list { height: 425px; }
 }
@@ -1323,14 +1327,14 @@ body {
 }
 @media (max-width: 410px) {
     .thumbnail-slider li a { width: 50px; }
-}*/
+}
 </style>
 <script>
 var vgsPlayer, poster;
 vgsPlayer = videojs('vid1');
 vgsPlayer.poster('https://img.youtube.com/vi/aqz-KE-bpKQ/maxresdefault.jpg');
 
-/********* LOAD URL *********/
+/********* LOAD URL ********
 $('#vidlink li a').on('click', function(e) {
     e.preventDefault();
     var vidlink = $(this).attr('href');
@@ -1390,7 +1394,7 @@ function vsgLoadVideo(vidURL, poster) {
     vgsPlayer.play();
     /*   setTimeout(function() {
      vgsPlayer.play();
-     }, 500); */
+     }, 500); 
 
     return false;
 
@@ -1399,17 +1403,17 @@ function vsgLoadVideo(vidURL, poster) {
 
 function ytVidId(url) {
     //var p = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
-    //var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+    //var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).;
+    var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).;
 
     if (url.match(p) || getId(url).length == 11)
         return false;
 }
 
-/**/
+/*
 function getId(url) {
-    //var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+    //var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).;
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).;
     var match = url.match(regExp);
 
     if (match && match[2].length == 11) {
@@ -1426,27 +1430,33 @@ var hds_suffix = /\.f4m/;
 var dash_suffix = /\.mpd/;
 var flv_suffix = /\.flv/;
 var webm_suffix = /\.webm/;
-/* AUDIO */
+/* AUDIO 
 //var mp3_suffix = /\.mp3/;
 var mpeg_suffix = /\.(mp3|m4a)/i;
 var ogg_suffix = /\.ogg/;
+var ts_suffix = /\.ts$/;
+
 
 //var youtube_suffix = /\.youtube.com/;
 //var yt_suffix = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
-var yt_suffix = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+var yt_suffix = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).;
 var dm_suffix = /\.?dailymotion.com/;
 var vm_suffix = /\.?vimeo.com/;
-/* ADVANCED REGEX */
+/* ADVANCED REGEX 
 //      var regVimeo = /^.*(vimeo.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
 //      var regDailymotion = /^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/;
 //      var regMetacafe = /^.*(metacafe.com)(\/watch\/)(d+)(.*)/i;
-//      var youtube_suffix = /(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+//      var youtube_suffix = /(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).;
 
 function getType(url) {
 
-    /* AUDIO */
+    /* AUDIO 
     if (mpeg_suffix.test(url))
         return 'audio/mpeg';
+    
+    if (ts_suffix.test(url))
+        return 'video/mp2t';
+
     if (ogg_suffix.test(url))
         return 'audio/ogg';
     if (dash_suffix.test(url))
@@ -1513,8 +1523,9 @@ function getExt(ext) {
 
 
 <div style="text-align:center; margin: 30px 0;">
-  <a href="https://facebook.com/yourpage" target="_blank" class="social-icon fb">Facebook</a>
-  <a href="https://t.me/yourchannel" target="_blank" class="social-icon tg">Telegram</a>
+  <a href="https://facebook.com/pktpolash.bd" target="_blank" class="social-icon fb">Facebook</a>
+  <a href="https://t.me/pktflix" target="_blank" class="social-icon tg">Telegram</a>
+  <a href="https://example.com/app.apk" class="social-icon app" target="_blank">Download App</a>
 </div>
 
 <style>
@@ -1534,6 +1545,12 @@ function getExt(ext) {
   }
 
   .tg {
+  background-color: #0088cc;
+}
+
+.app {
+  background-color: #28a745;
+}
     background-color: #0088cc;
   }
 
