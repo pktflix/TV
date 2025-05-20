@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>সর্বফরম্যাট ভিডিও প্লেয়ার</title>
+  <style>
+    body {
+      background: #101010;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    video {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 10px;
+      background: black;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      max-width: 600px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>সকল ফরম্যাট ভিডিও প্লেয়ার (.ts, .m3u8, .mp4)</h2>
+  <video id="player" controls autoplay></video>
+  <input type="text" id="url" placeholder="ভিডিও লিংক দিন (ts, m3u8, mp4)">
+  <button onclick="loadVideo()">চালাও</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    function loadVideo() {
+      const inputUrl = document.getElementById("url").value.trim();
+      const video = document.getElementById("player");
+      const proxy = "https://cors-proxy.fringe.zone/";
+      const isM3U8 = inputUrl.endsWith(".m3u8");
+      const isTS = inputUrl.endsWith(".ts");
+      const isMP4 = inputUrl.endsWith(".mp4");
+
+      // Clear previous
+      video.src = "";
+      video.load();
+
+      // Use proxy to bypass CORS
+      const proxiedUrl = proxy + encodeURIComponent(inputUrl);
+
+      if (isM3U8) {
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(proxiedUrl);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.play();
+          });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = proxiedUrl;
+          video.addEventListener("loadedmetadata", () => video.play());
+        } else {
+          alert("আপনার ব্রাউজার m3u8 সাপোর্ট করে না।");
+        }
+      } else {
+        video.src = proxiedUrl;
+        video.addEventListener("loadedmetadata", () => video.play());
+      }
+    }
+  </script>
+</body>
+</html>
