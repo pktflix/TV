@@ -1,74 +1,87 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <title>সর্বফরম্যাট ভিডিও প্লেয়ার</title>
+  <meta charset="UTF-8" />
+  <title>IPTV M3U8 প্লেলিস্ট জেনারেটর</title>
   <style>
     body {
-      background: #101010;
-      color: white;
+      background: #222;
+      color: #eee;
       font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    video {
-      width: 100%;
-      max-width: 800px;
-      margin-bottom: 10px;
-      background: black;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      width: 80%;
       max-width: 600px;
-      margin: 5px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 4px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 12px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .output {
+      background: #111;
+      padding: 15px;
+      border-radius: 6px;
+      word-break: break-all;
+      margin-top: 20px;
+      font-size: 14px;
+      user-select: all;
     }
   </style>
 </head>
 <body>
-  <h2>সকল ফরম্যাট ভিডিও প্লেয়ার (.ts, .m3u8, .mp4)</h2>
-  <video id="player" controls autoplay></video>
-  <input type="text" id="url" placeholder="ভিডিও লিংক দিন (ts, m3u8, mp4)">
-  <button onclick="loadVideo()">চালাও</button>
+  <h2>IPTV M3U8 প্লেলিস্ট জেনারেটর</h2>
+  <p>তোমার IPTV সার্ভার, ইউজারনেম ও পাসওয়ার্ড দিয়ে নিচে পূরণ করো।</p>
 
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <label for="server">সার্ভার URL (যেমন: http://server-ip:port)</label>
+  <input type="text" id="server" placeholder="http://123.45.67.89:8000" />
+
+  <label for="username">ইউজারনেম</label>
+  <input type="text" id="username" placeholder="username" />
+
+  <label for="password">পাসওয়ার্ড</label>
+  <input type="password" id="password" placeholder="password" />
+
+  <button onclick="generateM3U8()">ম3ইউ8 লিংক তৈরি করো</button>
+
+  <div id="result" class="output" style="display:none;"></div>
+
   <script>
-    function loadVideo() {
-      const inputUrl = document.getElementById("url").value.trim();
-      const video = document.getElementById("player");
-      const proxy = "https://cors-proxy.fringe.zone/";
-      const isM3U8 = inputUrl.endsWith(".m3u8");
-      const isTS = inputUrl.endsWith(".ts");
-      const isMP4 = inputUrl.endsWith(".mp4");
+    function generateM3U8() {
+      const server = document.getElementById("server").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const resultDiv = document.getElementById("result");
 
-      // Clear previous
-      video.src = "";
-      video.load();
-
-      // Use proxy to bypass CORS
-      const proxiedUrl = proxy + encodeURIComponent(inputUrl);
-
-      if (isM3U8) {
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(proxiedUrl);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.play();
-          });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = proxiedUrl;
-          video.addEventListener("loadedmetadata", () => video.play());
-        } else {
-          alert("আপনার ব্রাউজার m3u8 সাপোর্ট করে না।");
-        }
-      } else {
-        video.src = proxiedUrl;
-        video.addEventListener("loadedmetadata", () => video.play());
+      if (!server || !username || !password) {
+        alert("সবগুলো ফিল্ড পূরণ করো।");
+        return;
       }
+
+      // Xtream Codes API m3u8 URL ফরম্যাট (সর্বাধিক IPTV সিস্টেমে চলে)
+      const m3u8Url = `${server}/live/${username}/${password}/playlist.m3u8`;
+
+      resultDiv.style.display = "block";
+      resultDiv.textContent = "তোমার M3U8 URL:\n" + m3u8Url;
     }
   </script>
 </body>
