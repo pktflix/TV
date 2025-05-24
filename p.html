@@ -1,3 +1,24 @@
-#EXTM3U
-#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2048000,RESOLUTION=1280x720
-http://125.209.88.166:45793/BRN/ArySports.stream/playlist.m3u8
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Live TV</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body style="margin:0; background:#000; display:flex; justify-content:center; align-items:center; height:100vh;">
+  <video id="video" controls autoplay width="800" height="450" style="background:#000;"></video>
+
+  <script>
+    const video = document.getElementById('video');
+    const videoSrc = "https://m3u8-proxy-opal.vercel.app/api/stream?url=http://125.209.88.166:45793/BRN/ArySports.stream/playlist.m3u8";
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+    }
+  </script>
+</body>
+</html>
