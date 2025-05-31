@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PKT Flix</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
   <style>
@@ -12,89 +11,80 @@
       background-color: #000;
       color: white;
       font-family: Arial, sans-serif;
-      height: 100%;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-
-    body.light-mode {
-      background-color: #fff;
-      color: #000;
-    }
-
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
       background-color: #111;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      flex-wrap: wrap;
     }
-
-    body.light-mode header {
-      background-color: #ddd;
-    }
-
     .logo {
       font-size: 24px;
       font-weight: bold;
       color: #00abff;
     }
-
     #clock-container {
       text-align: right;
-      font-size: 16px;
-      min-width: 120px;
+      font-size: 14px;
     }
-
-    #date {
-      font-size: 13px;
-      margin-top: 3px;
-      opacity: 0.7;
-    }
-
     .video-container {
-      position: relative;
       width: 100%;
       max-width: 800px;
-      margin: 10px auto 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      margin: 10px auto;
+      position: relative;
     }
-
-    .video-container.hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.95);
-    }
-
-    #video-player {
+    #player {
       width: 100%;
       height: 45vh;
-      max-height: 360px;
-      border-radius: 8px;
       background: black;
+      border-radius: 8px;
     }
-
-    .clappr-fullscreen-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      z-index: 10;
-      cursor: pointer;
-      background: rgba(0,0,0,0.4);
-      border-radius: 4px;
-      padding: 5px;
+    .mini-player {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 300px;
+      height: 170px;
+      z-index: 9999;
+      background: black;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .mini-player iframe,
+    .mini-player video {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .social-links {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .social-links a {
+      background-color: #222;
       color: white;
-      font-size: 18px;
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.3s;
     }
-
+    .social-links a:hover {
+      background-color: #444;
+    }
     .category-buttons {
       margin: 20px auto 10px;
       text-align: center;
+      flex-wrap: wrap;
     }
-
     .cat-btn {
       background-color: #222;
       color: white;
@@ -104,30 +94,46 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
-      transition: all 0.2s ease-in-out;
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
-
-    .cat-btn:hover,
-    .cat-btn.active {
-      background-color: #444;
-      transform: scale(1.05);
+    .channel-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px;
+      justify-content: center;
     }
-
-    body.light-mode .cat-btn {
-      background-color: #ddd;
-      color: #000;
-      border-color: #bbb;
-    }
-
-    #views {
+    .channel-item {
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
       text-align: center;
-      margin: 15px 0;
-      font-size: 16px;
+      width: 150px;
+      cursor: pointer;
     }
-
+    .channel-logo {
+      width: 100%;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .channel-name {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .playing-label {
+      color: #0f0;
+      font-size: 12px;
+      margin-top: 4px;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
     #search-bar {
       width: 90%;
       max-width: 500px;
@@ -138,102 +144,6 @@
       border: none;
       font-size: 16px;
     }
-
-    .channel-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      padding: 10px;
-      justify-items: center;
-      max-height: 75vh;
-      overflow-y: auto;
-    }
-
-    .channel-item {
-      width: 100%;
-      max-width: 150px;
-      background-color: #111;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      color: white;
-      cursor: pointer;
-    }
-
-    body.light-mode .channel-item {
-      background-color: #f0f0f0;
-      color: #000;
-    }
-
-    .channel-logo {
-      width: 100%;
-      height: 100px;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-
-    .channel-name {
-      margin-top: 5px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .playing-label {
-      color: #00ff00;
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    #loader {
-      display: none;
-      text-align: center;
-      padding: 20px;
-      color: white;
-    }
-
-    .spinner {
-      border: 6px solid #444;
-      border-top: 6px solid #00abff;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    #mini-player {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 200px;
-      height: 120px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.7);
-      display: none;
-      z-index: 9999;
-      overflow: hidden;
-      background: black;
-    }
-
-    #mini-player video {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-    }
-
-    @media (max-width: 600px) {
-      .channel-item {
-        max-width: 45%;
-      }
-      #video-player {
-        height: 200px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -243,198 +153,142 @@
       <div id="clock">--:--:--</div>
       <div id="date">--/--/----</div>
     </div>
-  </header>
-
-  <div class="video-container">
+  </header>  <div class="video-container" id="main-player">
     <div id="player"></div>
-    <div class="clappr-fullscreen-btn" id="fullscreen-btn" title="Fullscreen"><i class="fas fa-expand"></i></div>
-  </div>
+  </div>  <div class="mini-player" id="miniPlayer"></div>  <div class="social-links">
+    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+    <a href="#"><i class="fab fa-telegram"></i> Telegram</a>
+    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="#"><i class="fas fa-download"></i> App Download</a>
+  </div>  <div class="category-buttons">
+    <button class="cat-btn" onclick="switchTab('sports')"><i class="fas fa-futbol"></i> Sports</button>
+    <button class="cat-btn" onclick="switchTab('bangla')"><i class="fas fa-language"></i> Bangla</button>
+    <button class="cat-btn" onclick="switchTab('hindi')"><i class="fas fa-globe-asia"></i> Hindi</button>
+    <button class="cat-btn" onclick="switchTab('english')"><i class="fas fa-globe"></i> English</button>
+    <button class="cat-btn" onclick="switchTab('music')"><i class="fas fa-music"></i> Music</button>
+    <button class="cat-btn" onclick="switchTab('kids')"><i class="fas fa-child"></i> Kids</button>
+    <button class="cat-btn" onclick="switchTab('religious')"><i class="fas fa-praying-hands"></i> Religious</button>
+    <button class="cat-btn" onclick="switchTab('movie')"><i class="fas fa-film"></i> Movie</button>
+  </div>  <input type="text" id="search-bar" oninput="searchChannels()" placeholder="🔍 Search Channels...">
+  <div class="channel-list" id="channel-list"></div>  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>  <script>
+    const player = new Clappr.Player({
+      parentId: '#player',
+      autoPlay: true,
+      width: '100%',
+      height: '100%',
+      mute: false
+    });
 
-  <div class="category-buttons">
-    <button class="cat-btn" onclick="switchTab('sports', m3uLinks.sports)"><i class="fas fa-futbol"></i> Sports</button>
-    <button class="cat-btn" onclick="switchTab('entertainment', m3uLinks.entertainment)"><i class="fas fa-film"></i> Entertainment</button>
-    <button class="cat-btn" onclick="switchTab('news', m3uLinks.news)"><i class="fas fa-newspaper"></i> News</button>
-    <button class="cat-btn" onclick="switchTab('music', m3uLinks.music)"><i class="fas fa-music"></i> Music</button>
-    <button class="cat-btn" onclick="switchTab('religious', m3uLinks.religious)"><i class="fas fa-praying-hands"></i> Religious</button>
-    <button class="cat-btn" onclick="switchTab('other', m3uLinks.other)"><i class="fas fa-ellipsis-h"></i> Other</button>
-    <button class="cat-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i> Theme</button>
-  </div>
+    const m3uLinks = {
+      sports: 'https://iptv-org.github.io/iptv/categories/sports.m3u',
+      bangla: 'https://iptv-org.github.io/iptv/languages/bn.m3u',
+      hindi: 'https://iptv-org.github.io/iptv/languages/hi.m3u',
+      english: 'https://iptv-org.github.io/iptv/languages/en.m3u',
+      music: 'https://iptv-org.github.io/iptv/categories/music.m3u',
+      kids: 'https://iptv-org.github.io/iptv/categories/kids.m3u',
+      religious: 'https://iptv-org.github.io/iptv/categories/religious.m3u',
+      movie: 'https://iptv-org.github.io/iptv/categories/movies.m3u'
+    };
 
-  <div id="views">👁️ Views: <span id="view-count">0</span></div>
-  <input type="text" id="search-bar" oninput="searchChannels()" placeholder="🔍 Search Channels..." x-webkit-speech speech />
-  <div id="loader"><div class="spinner"></div><p>Loading Channels...</p></div>
-  <div class="channel-list" id="channel-list"></div>
-  <div id="mini-player"><video muted></video></div>
-  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
-<script>
-  // ঘড়ি
-  function updateClockAndDate() {
-    const now = new Date();
-    document.getElementById('clock').innerText = now.toLocaleTimeString();
-    document.getElementById('date').innerText = now.toLocaleDateString();
-  }
-  setInterval(updateClockAndDate, 1000);
-  updateClockAndDate();
+    let channels = [];
+    let playingChannel = '';
 
-  // থিম টগল
-  function toggleTheme() {
-    document.body.classList.toggle('light-mode');
-    localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-  }
-
-  if (localStorage.getItem('theme') === 'light') {
-    document.body.classList.add('light-mode');
-  }
-
-  // ভিউ কাউন্ট
-  let viewCount = localStorage.getItem('viewCount') || 0;
-  viewCount++;
-  localStorage.setItem('viewCount', viewCount);
-  document.getElementById('view-count').innerText = viewCount;
-
-  // প্লেয়ার
-  let player = new Clappr.Player({
-    parentId: '#player',
-    autoPlay: false,
-    width: '100%',
-    height: '45vh',
-    mute: false,
-    playbackNotSupportedMessage: "Sorry, your browser does not support this video.",
-  });
-
-  document.getElementById('fullscreen-btn').addEventListener('click', () => {
-    if (!player.isFullscreen()) {
-      player.enterFullscreen();
-    } else {
-      player.exitFullscreen();
+    function updateClockAndDate() {
+      const now = new Date();
+      document.getElementById('clock').innerText = now.toLocaleTimeString();
+      document.getElementById('date').innerText = now.toLocaleDateString();
     }
-  });
+    setInterval(updateClockAndDate, 1000);
+    updateClockAndDate();
 
-  const videoContainer = document.querySelector('.video-container');
-  const miniPlayer = document.getElementById('mini-player');
-  const miniPlayerVideo = miniPlayer.querySelector('video');
-  let isMini = false;
-  let lastScrollY = window.scrollY;
-
-  window.addEventListener('scroll', () => {
-    const goingDown = window.scrollY > lastScrollY;
-    lastScrollY = window.scrollY;
-
-    if (window.scrollY < 100) {
-      videoContainer.classList.add('hidden');
-      miniPlayer.style.display = 'none';
-      miniPlayerVideo.pause();
-      isMini = false;
-    } else if (goingDown && player.isPlaying()) {
-      videoContainer.classList.remove('hidden');
-      if (!isMini) {
-        miniPlayer.style.display = 'block';
-        const src = player.getCurrentPlayback().getSrc();
-        miniPlayerVideo.src = src;
-        miniPlayerVideo.play();
-        isMini = true;
-      }
+    function switchTab(category) {
+      fetch(m3uLinks[category])
+        .then(res => res.text())
+        .then(text => {
+          const parsed = parseM3U(text);
+          channels = parsed;
+          renderChannels();
+        });
     }
-  });
 
-  const m3uLinks = {
-    sports: 'https://iptv-org.github.io/iptv/categories/sports.m3u',
-    entertainment: 'https://iptv-org.github.io/iptv/categories/entertainment.m3u',
-    news: 'https://iptv-org.github.io/iptv/categories/news.m3u',
-    music: 'https://iptv-org.github.io/iptv/categories/music.m3u',
-    religious: 'https://iptv-org.github.io/iptv/categories/religious.m3u',
-    other: 'https://iptv-org.github.io/iptv/categories/others.m3u'
-  };
-
-  let channels = [];
-  let currentTab = 'sports';
-  let playingChannel = '';
-
-  function loadM3UData(m3uLink) {
-    document.getElementById('loader').style.display = 'block';
-    fetch(m3uLink)
-      .then(res => res.text())
-      .then(data => {
-        channels = [];
-        parseM3UData(data);
-        displayChannels();
-        document.getElementById('loader').style.display = 'none';
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('loader').style.display = 'none';
-      });
-  }
-
-  function parseM3UData(data) {
-    const lines = data.split('\n');
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith('#EXTINF')) {
-        let name = lines[i].split(',')[1]?.trim() || 'Unknown';
-        let logoMatch = lines[i].match(/tvg-logo="(.*?)"/);
-        let logo = logoMatch ? logoMatch[1] : 'https://via.placeholder.com/100';
-        let link = lines[i + 1]?.trim();
-        if (link && link.startsWith('http')) {
-          channels.push({ name, logo, m3uLink: link });
+    function parseM3U(data) {
+      const lines = data.split('\n');
+      const parsed = [];
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('#EXTINF')) {
+          const name = lines[i].split(',')[1] || 'Unknown';
+          const logoMatch = lines[i].match(/tvg-logo="(.*?)"/);
+          const logo = logoMatch ? logoMatch[1] : 'https://via.placeholder.com/100';
+          const url = lines[i + 1]?.trim();
+          if (url && url.startsWith('http')) {
+            parsed.push({ name, logo, m3uLink: url });
+          }
         }
       }
+      return parsed;
     }
-  }
 
-  function displayChannels() {
-    const list = document.getElementById('channel-list');
-    list.innerHTML = '';
-    channels.forEach(channel => {
-      const div = document.createElement('div');
-      div.className = 'channel-item';
-      div.innerHTML = `
-        <img src="${channel.logo}" class="channel-logo" onclick="playVideo('${channel.m3uLink}')" />
-        <div class="channel-name">${channel.name}</div>
-        <div class="playing-label" style="display: ${playingChannel === channel.m3uLink ? 'block' : 'none'};"><i class='fas fa-play'></i> Playing</div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function playVideo(m3uLink) {
-    playingChannel = m3uLink;
-    localStorage.setItem('lastPlayed', m3uLink);
-    player.load(m3uLink);
-    player.play();
-    displayChannels();
-  }
-
-  function switchTab(tab, m3uLink) {
-    currentTab = tab;
-    playingChannel = '';
-    loadM3UData(m3uLink);
-  }
-
-  function searchChannels() {
-    const q = document.getElementById('search-bar').value.toLowerCase();
-    const filtered = channels.filter(c => c.name.toLowerCase().includes(q));
-    const list = document.getElementById('channel-list');
-    list.innerHTML = '';
-    filtered.forEach(channel => {
-      const div = document.createElement('div');
-      div.className = 'channel-item';
-      div.innerHTML = `
-        <img src="${channel.logo}" class="channel-logo" onclick="playVideo('${channel.m3uLink}')" />
-        <div class="channel-name">${channel.name}</div>
-        <div class="playing-label" style="display: ${playingChannel === channel.m3uLink ? 'block' : 'none'};"><i class='fas fa-play'></i> Playing</div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const last = localStorage.getItem('lastPlayed');
-    if (last) {
-      playingChannel = last;
-      player.load(last);
+    function renderChannels() {
+      const list = document.getElementById('channel-list');
+      list.innerHTML = '';
+      channels.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'channel-item';
+        div.onclick = () => playVideo(c.m3uLink);
+        div.innerHTML = `
+          <img src="${c.logo}" class="channel-logo">
+          <div class="channel-name">${c.name}</div>
+          <div class="playing-label" style="display: ${playingChannel === c.m3uLink ? 'block' : 'none'};"><i class='fas fa-play'></i> Playing</div>
+        `;
+        list.appendChild(div);
+      });
     }
-    switchTab(currentTab, m3uLinks[currentTab]);
-  });
-</script>
-</body>
+
+    function playVideo(link) {
+      playingChannel = link;
+      player.load(link);
+      localStorage.setItem('lastPlayed', link);
+      renderChannels();
+    }
+
+    function searchChannels() {
+      const q = document.getElementById('search-bar').value.toLowerCase();
+      const filtered = channels.filter(c => c.name.toLowerCase().includes(q));
+      const list = document.getElementById('channel-list');
+      list.innerHTML = '';
+      filtered.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'channel-item';
+        div.onclick = () => playVideo(c.m3uLink);
+        div.innerHTML = `
+          <img src="${c.logo}" class="channel-logo">
+          <div class="channel-name">${c.name}</div>
+          <div class="playing-label" style="display: ${playingChannel === c.m3uLink ? 'block' : 'none'};"><i class='fas fa-play'></i> Playing</div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Scroll Event for Mini Player
+    window.addEventListener('scroll', () => {
+      const mini = document.getElementById('miniPlayer');
+      const main = document.getElementById('main-player');
+      if (window.scrollY > 300) {
+        mini.style.display = 'block';
+        mini.innerHTML = main.innerHTML;
+      } else {
+        mini.style.display = 'none';
+      }
+    });
+
+    // Load default category and last played
+    window.addEventListener('load', () => {
+      switchTab('sports');
+      const last = localStorage.getItem('lastPlayed');
+      if (last) {
+        playingChannel = last;
+        player.load(last);
+      }
+    });
+  </script></body>
 </html>
