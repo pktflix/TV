@@ -56,29 +56,35 @@
       overflow: hidden;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    .mini-player iframe,
-    .mini-player video {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
     .social-links {
       text-align: center;
       margin: 15px 0;
     }
     .social-links a {
-      background-color: #222;
-      color: white;
       display: inline-block;
       margin: 5px;
       padding: 10px 15px;
       border-radius: 8px;
       text-decoration: none;
       font-size: 16px;
+      font-weight: bold;
       transition: background 0.3s;
     }
-    .social-links a:hover {
-      background-color: #444;
+    .social-links a.facebook {
+      background-color: #3b5998;
+      color: white;
+    }
+    .social-links a.telegram {
+      background-color: #0088cc;
+      color: white;
+    }
+    .social-links a.instagram {
+      background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+      color: white;
+    }
+    .social-links a.download {
+      background-color: #28a745;
+      color: white;
     }
     .category-buttons {
       margin: 20px auto 10px;
@@ -156,10 +162,10 @@
   </header>  <div class="video-container" id="main-player">
     <div id="player"></div>
   </div>  <div class="mini-player" id="miniPlayer"></div>  <div class="social-links">
-    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
-    <a href="#"><i class="fab fa-telegram"></i> Telegram</a>
-    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
-    <a href="#"><i class="fas fa-download"></i> App Download</a>
+    <a href="#" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
+    <a href="#" class="telegram"><i class="fab fa-telegram"></i> Telegram</a>
+    <a href="#" class="instagram"><i class="fab fa-instagram"></i> Instagram</a>
+    <a href="#" class="download"><i class="fas fa-download"></i> App Download</a>
   </div>  <div class="category-buttons">
     <button class="cat-btn" onclick="switchTab('sports')"><i class="fas fa-futbol"></i> Sports</button>
     <button class="cat-btn" onclick="switchTab('bangla')"><i class="fas fa-language"></i> Bangla</button>
@@ -171,7 +177,10 @@
     <button class="cat-btn" onclick="switchTab('movie')"><i class="fas fa-film"></i> Movie</button>
   </div>  <input type="text" id="search-bar" oninput="searchChannels()" placeholder="🔍 Search Channels...">
   <div class="channel-list" id="channel-list"></div>  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>  <script>
-    const player = new Clappr.Player({
+    let mainPlayerContainer = document.getElementById('player');
+    let miniPlayer = document.getElementById('miniPlayer');
+
+    let player = new Clappr.Player({
       parentId: '#player',
       autoPlay: true,
       width: '100%',
@@ -246,8 +255,8 @@
 
     function playVideo(link) {
       playingChannel = link;
-      player.load(link);
       localStorage.setItem('lastPlayed', link);
+      player.load(link);
       renderChannels();
     }
 
@@ -272,12 +281,22 @@
     // Scroll Event for Mini Player
     window.addEventListener('scroll', () => {
       const mini = document.getElementById('miniPlayer');
-      const main = document.getElementById('main-player');
       if (window.scrollY > 300) {
         mini.style.display = 'block';
-        mini.innerHTML = main.innerHTML;
+        if (!mini.innerHTML) {
+          mini.innerHTML = '<div id="mini-player-inner"></div>';
+          new Clappr.Player({
+            parentId: '#mini-player-inner',
+            source: playingChannel,
+            autoPlay: true,
+            mute: true,
+            width: '100%',
+            height: '100%'
+          });
+        }
       } else {
         mini.style.display = 'none';
+        mini.innerHTML = '';
       }
     });
 
