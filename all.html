@@ -153,13 +153,13 @@ const video = document.getElementById("player");
     let playingChannel = '';
     const m3uLinks = {
       sports: 'https://iptv-org.github.io/iptv/categories/sports.m3u',
-      bangla: 'https://crichd-playlist-by-noob.pages.dev/ALL.m3u',
+      bangla: 'https://iptv-org.github.io/iptv/languages/bn.m3u',
       hindi: 'https://iptv-org.github.io/iptv/languages/hi.m3u',
       english: 'https://iptv-org.github.io/iptv/languages/en.m3u',
       music: 'https://iptv-org.github.io/iptv/categories/music.m3u',
       kids: 'https://iptv-org.github.io/iptv/categories/kids.m3u',
       religious: 'https://iptv-org.github.io/iptv/categories/religious.m3u',
-      movie: 'https://iptv-org.github.io/iptv/categories/movies.m3u'
+      movie: 'https://crichd-playlist-by-noob.pages.dev/ALL.m3u'
     };
     let channels = [];
 
@@ -215,13 +215,21 @@ const video = document.getElementById("player");
       playingChannel = link;
       localStorage.setItem('lastPlayed', link);
       
+    const sanitizeLink = (url) => {
+      if (location.protocol === 'https:' && url.startsWith('http://')) {
+        return 'https://iptv.pktpolash-bd.workers.dev/?url=' + encodeURIComponent(url);
+      }
+      return url;
+    };
+    const streamURL = sanitizeLink(link);
+
     if (Hls.isSupported()) {
       if (hls) hls.destroy();
       hls = new Hls();
-      hls.loadSource(link);
+      hls.loadSource(streamURL);
       hls.attachMedia(video);
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = link;
+      video.src = streamURL;
     }
     
       renderChannels();
