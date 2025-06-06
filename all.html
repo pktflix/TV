@@ -1,4 +1,6 @@
-<!-- FULL IPTV SITE WITHOUT MINI PLAYER --><!DOCTYPE html><html lang="en">
+
+<!-- FULL IPTV SITE WITHOUT MINI PLAYER -->
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -131,12 +133,17 @@
       <div id="clock">--:--:--</div>
       <div id="date">--/--/----</div>
     </div>
-  </header>  <div class="video-container"><video id="player" controls autoplay muted style="width:100%; height:45vh; border-radius:8px; background:black;"></video></div>  <div class="social-links">
+  </header>
+  <div class="video-container">
+    <video id="player" controls autoplay muted style="width:100%; height:45vh; border-radius:8px; background:black;"></video>
+  </div>
+  <div class="social-links">
     <a href="#" class="facebook"><i class="fab fa-facebook"></i> Facebook</a>
     <a href="#" class="telegram"><i class="fab fa-telegram"></i> Telegram</a>
     <a href="#" class="instagram"><i class="fab fa-instagram"></i> Instagram</a>
     <a href="#" class="download"><i class="fas fa-download"></i> App Download</a>
-  </div>  <div class="category-buttons">
+  </div>
+  <div class="category-buttons">
     <button class="cat-btn" onclick="switchTab('sports')">Sports</button>
     <button class="cat-btn" onclick="switchTab('bangla')">Bangla</button>
     <button class="cat-btn" onclick="switchTab('hindi')">Hindi</button>
@@ -145,10 +152,13 @@
     <button class="cat-btn" onclick="switchTab('kids')">Kids</button>
     <button class="cat-btn" onclick="switchTab('religious')">Religious</button>
     <button class="cat-btn" onclick="switchTab('movie')">Movie</button>
-  </div>  <input type="text" id="search-bar" placeholder="🔍 Search Channels..." oninput="searchChannels()"/>
-  <div class="channel-list" id="channel-list"></div>  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>  <script>
+  </div>
+  <input type="text" id="search-bar" placeholder="🔍 Search Channels..." oninput="searchChannels()"/>
+  <div class="channel-list" id="channel-list"></div>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
     let hls;
-const video = document.getElementById("player");
+    const video = document.getElementById("player");
 
     let playingChannel = '';
     const m3uLinks = {
@@ -211,27 +221,25 @@ const video = document.getElementById("player");
       });
     }
 
+    function sanitizeLink(url) {
+      return 'https://pktflix.free.nf/proxy.php?url=' + encodeURIComponent(url);
+    }
+
     function playVideo(link) {
       playingChannel = link;
       localStorage.setItem('lastPlayed', link);
-      
-    const sanitizeLink = (url) => {
-      if (location.protocol === 'https:' && url.startsWith('http://')) {
-        return 'https://iptv.pktpolash-bd.workers.dev/?url=' + encodeURIComponent(url);
-      }
-      return url;
-    };
-    const streamURL = sanitizeLink(link);
 
-    if (Hls.isSupported()) {
-      if (hls) hls.destroy();
-      hls = new Hls();
-      hls.loadSource(streamURL);
-      hls.attachMedia(video);
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = streamURL;
-    }
-    
+      const streamURL = sanitizeLink(link);
+
+      if (Hls.isSupported()) {
+        if (hls) hls.destroy();
+        hls = new Hls();
+        hls.loadSource(streamURL);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamURL;
+      }
+
       renderChannels();
     }
 
@@ -262,5 +270,6 @@ const video = document.getElementById("player");
         player.load(last);
       }
     });
-  </script></body>
+  </script>
+</body>
 </html>
